@@ -11,17 +11,51 @@
 --Create view
 --view = View.create("Assets/img/map.jpg")
 
-block = {}
 -- Small Block
+block = Blockinator.create(0,200)
+block2 = Blockinator.create(-200,200)
+
+position = 200
+position2 = 200
+----------------------------------
+-- Game loop
+----------------------------------
+
+thread = MOAIThread.new()
+thread:run(function() 
+    
+    while true do
+    
+      update()
+      -- Start next thread
+      coroutine.yield()
+    
+    end
+    
+end)
+
+function update() 
+  
+  position = position - 2
+  position2 = position2 - 0.5
+  
+  block:move(0,position)
+  block2:move(-200,position2)
+  
+end
+
+
+--Floor
+bodies[0] = world:addBody( MOAIBox2DBody.STATIC )
+bodies[0]:setTransform( 0, -300 )  
+fixtures[0] = bodies[0]:addRect( -300, -10, 300, 10 )
+
+----------------------------------
+--Play Field
+----------------------------------
+
 --[[
-block[4] = Block.create(0+(0),200+(0))
-block[5] = Block.create(0+(16*2), 200+(0))
-block[6] = Block.create(0+(16*2), 200+(16*2))
-block[7] = Block.create(0+(16*4), 200+(16*2))
---]]
-
---block[4] = Block.create(-280,400)
-
+block = {}
 xCount = 0
 yCount = 0
 max = 13
@@ -43,3 +77,4 @@ for i=1, amountBlocks do
   end
   
 end
+--]]

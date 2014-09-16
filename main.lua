@@ -43,6 +43,9 @@ test = {}
 text = {}
 view = {}
 
+bodies = {}
+fixtures = {}
+
 -- Helpers
 require("Helpers/view")
 require("Helpers/block")
@@ -50,5 +53,6 @@ require("Helpers/button")
 require("Helpers/view")
 
 -- Mechanics
+require("Mechanics/Blocks/blockinator")
 require("Mechanics/touchHandlers")
 require("game")

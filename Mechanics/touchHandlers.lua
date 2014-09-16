@@ -40,9 +40,12 @@ function touch(x, y)
     
     local touchedProp = partition:propForPoint(layer:wndToWorld(x, y))
     
+    --[[
     if(touchedProp == test:getProp()) then
       
       view:slide()
       
     end
+    --]]
+    
 end
