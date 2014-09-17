@@ -43,6 +43,10 @@ test = {}
 text = {}
 view = {}
 
+blocks = {}
+blockAmount = 1
+
+--testing porpuses: ground
 bodies = {}
 fixtures = {}
 

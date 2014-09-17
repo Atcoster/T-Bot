@@ -2,21 +2,6 @@
 -- Core works
 ----------------------------
 
---Create button
---test = Button.create(-50, 400, "Assets/img/Blue_brick.png")
-
---Create text field
---text = TextField.create(0, -100, 100, 50, "Testing")
-
---Create view
---view = View.create("Assets/img/map.jpg")
-
--- Small Block
-block = Blockinator.create(0,200)
-block2 = Blockinator.create(-200,200)
-
-position = 200
-position2 = 200
 ----------------------------------
 -- Game loop
 ----------------------------------
@@ -36,12 +21,16 @@ end)
 
 function update() 
   
-  position = position - 2
-  position2 = position2 - 0.5
+  for key,value in pairs(blocks) do --actualcode
+    
+    if blocks[key]:getMovement() == true then
+    
+      blocks[key]:drop()
+    
+    end
   
-  block:move(0,position)
-  block2:move(-200,position2)
-  
+  end
+ 
 end
 
 

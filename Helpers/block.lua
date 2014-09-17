@@ -8,7 +8,7 @@ Block.__index = Block
 -- Constructor
 ----------------------------
 
-function Block.create(x,y)
+function Block.create(x, y, id)
 
   local blk = {}
   setmetatable(blk, Block)
@@ -24,23 +24,21 @@ function Block.create(x,y)
   
   blk._fixture = blk._body:addRect( -blk._size, -blk._size, blk._size, blk._size )
   blk._fixture:setSensor(true)
-  
+  blk._fixture.userdata = id
   
   function handleCollision(phase, a, b, arbiter)
   
     if phase == MOAIBox2DArbiter.BEGIN then
       
-      if b == fixtures[0] then
+      if tostring(b.userdata) ~= tostring(a.userdata) then
         
-        
-        --blk._body:setTransform(0,0)
-        print("HITTT")
+        blk._movement = false
       
       end
-    
+      
     elseif phase == MOAIBox2DArbiter.END then
         
-      print("....")
+      blk._movement = true
     
     end
 
@@ -65,6 +63,23 @@ end
 function Block:getMovement()
   
   return self._movement
+  
+end
+
+function Block:getBlockPosition(pos)
+    
+    
+    local x,y = self._body:getPosition()
+    
+    if pos == "x" then return x end
+    if pos == "y" then return y end
+    if pos == nil then return self._body:getPosition() end
+    
+end
+
+function Block:getId()
+  
+  return self._id
   
 end
 
