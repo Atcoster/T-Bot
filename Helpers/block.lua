@@ -8,7 +8,7 @@ Block.__index = Block
 -- Constructor
 ----------------------------
 
-function Block.create(x, y, id)
+function Block.create(x, y)
 
   local blk = {}
   setmetatable(blk, Block)
@@ -17,28 +17,43 @@ function Block.create(x, y, id)
   blk._x = x
   blk._y = y
   blk._movement = true
+  blk._destruction = false
   
+  --Body
   blk._body = world:addBody( MOAIBox2DBody.DYNAMIC )
-  
   blk._body:setTransform( x, y )
   
+  --Fixture
   blk._fixture = blk._body:addRect( -blk._size, -blk._size, blk._size, blk._size )
   blk._fixture:setSensor(true)
-  blk._fixture.userdata = id
+  blk._fixture.userdata = "Block"
   
+  -- Texture
+  blk._image = MOAIGfxQuad2D.new()
+  blk._prop = MOAIProp2D.new()
+  
+  --Collision
   function handleCollision(phase, a, b, arbiter)
   
     if phase == MOAIBox2DArbiter.BEGIN then
       
-      if tostring(b.userdata) ~= tostring(a.userdata) then
+      if b.userdata == "Bullet" and b ~= nil then
         
-        blk._movement = false
-      
+        blk:destruction()
+        
+        for key,value in pairs(bullet) do --actualcode
+    
+          if bullet[key]:getBulletBody() == b:getBody() then
+            
+            bullet[key]:destruction()
+          
+          end
+        
+        end
+       
       end
       
     elseif phase == MOAIBox2DArbiter.END then
-        
-      blk._movement = true
     
     end
 
@@ -46,7 +61,9 @@ function Block.create(x, y, id)
   
   blk._fixture:setCollisionHandler(handleCollision, MOAIBox2DArbiter.BEGIN + MOAIBox2DArbiter.END)
   
-  -- Return obj
+  
+  blk:make()
+  
   return blk
 
 end
@@ -54,6 +71,19 @@ end
 ----------------------------
 -- Functions
 ----------------------------
+function Block:make()
+
+  self._image:setTexture(resourceManager:getTexture("box"))
+  self._image:setRect(-24, -24, 24, 24)
+
+  self._prop:setDeck(self._image)
+  
+  self._prop:setParent(self._body)
+  
+  layer:insertProp(self._prop)
+  
+end
+
 function Block:getBlockBody()
   
   return self._body
@@ -80,6 +110,20 @@ end
 function Block:getId()
   
   return self._id
+  
+end
+
+function Block:getDestructionState()
+  
+  return self._destruction
+  
+end
+
+function Block:destruction()
+  
+  self._destruction = true
+  layer:removeProp(self._prop)
+  self._body:destroy()
   
 end
 

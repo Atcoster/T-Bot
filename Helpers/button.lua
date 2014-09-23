@@ -7,14 +7,14 @@ Button.__index = Button
 ----------------------------
 -- Constructor
 ----------------------------
-function Button.create(x, y, imgSource)
+function Button.create(x, y, texture)
 
   local btn = {}
   setmetatable(btn, Button)
   
   btn._x = x
   btn._y = y
-  btn._imgSource = imgSource
+  btn._texture = texture
   
   btn._sprite = MOAIGfxQuad2D.new()
   btn._prop =  MOAIProp2D.new()
@@ -32,13 +32,11 @@ end
 --Create button (Internal function)
 function Button:make()
   
-  --Texture
-  local texture = MOAIImage.new()
-  texture:load(self._imgSource)
-  local w, h = texture:getSize()
+  --Texture diminsions
+  local w, h = self._texture:getSize()
   
   --Sprite
-  self._sprite:setTexture(texture)
+  self._sprite:setTexture(self._texture)
   self._sprite:setRect(-w, -h, w, h)
   
   --Prop
@@ -53,9 +51,9 @@ function Button:make()
 end
 
 -- Set Texture
-function Button:changeTexture(newImg)
+function Button:changeTexture(texture)
   
-  self._imgSource = newImg
+  self._texture = texture
   layer:removeProp(self._prop)
   self:make()
   

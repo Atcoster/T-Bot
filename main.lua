@@ -25,7 +25,7 @@ MOAIGfxDevice.getFrameBuffer():setClearColor(0, 0, 0, 1);
 
 -- Creating the world
 gravityX = 0;
-gravityY = 0; 
+gravityY = -5; 
 world = MOAIBox2DWorld.new();
 world:setGravity(gravityX, gravityY);
 world:setUnitsToMeters(1/30);
@@ -39,16 +39,25 @@ layer:setPartition(partition)
 ----------------------------
 -- Global vars
 ----------------------------
-test = {}
+button = {}
 text = {}
 view = {}
+player = {}
+bullet = {}
 
 blocks = {}
-blockAmount = 1
+blockGenerator = {}
+
+resourceManager = {}
 
 --testing porpuses: ground
 bodies = {}
 fixtures = {}
+images = {}
+props = {}
+
+require("Helpers/resourceManager")
+resourceManager = ResourceManager.create()
 
 -- Helpers
 require("Helpers/view")
@@ -56,7 +65,13 @@ require("Helpers/block")
 require("Helpers/button")
 require("Helpers/view")
 
+
 -- Mechanics
-require("Mechanics/Blocks/blockinator")
+require("Mechanics/blockinator")
+require("Mechanics/player")
+require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
 require("game")
+
+
+

@@ -10,11 +10,14 @@ if MOAIInputMgr.device.pointer then
       if(isMouseDown) then
         
         -- Mouse down 
+        touch(MOAIInputMgr.device.pointer:getLoc())
         
       else
         -- Mouse Up
-        touch(MOAIInputMgr.device.pointer:getLoc())
+        if player:getMovement() == true then player:setMovement(false) end
         
+        if player:getJumpState() == true then player:setJumpState(false) end
+
       end
       
     end
@@ -40,14 +43,32 @@ function touch(x, y)
     
     local touchedProp = partition:propForPoint(layer:wndToWorld(x, y))
     
-    table.insert(blocks, Blockinator.create(layer:wndToWorld(x, y)))
     
-    --[[
-    if(touchedProp == test:getProp()) then
+    if(touchedProp == button["right"]:getProp()) then
       
-      view:slide()
+      player:setMovement(true)
+      player:setDirection(5)
       
     end
-    --]]
+    
+    if(touchedProp == button["left"]:getProp()) then
+      
+      player:setMovement(true)
+      player:setDirection(-5)
+     
+    end
+    
+    if(touchedProp == button["jump"]:getProp()) then
+      
+      player:setJumpState(true)
+      
+    end
+    
+    if(touchedProp == button["shoot"]:getProp()) then
+      
+      table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
+      
+    end
+    
     
 end
