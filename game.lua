@@ -1,13 +1,19 @@
 ----------------------------
 -- Core works
 ----------------------------
+view["gamescreen"] = View.create(resourceManager:getTexture("background"))
+
 player = Player.create()
 blockGenerator = Blockinator.create()
 
-button["right"] = Button.create(200, 0, resourceManager:getTexture("button"))
-button["left"] = Button.create(-200, 0, resourceManager:getTexture("button"))
-button["jump"] = Button.create(200, -100, resourceManager:getTexture("button"))
-button["shoot"] = Button.create(-200, -100, resourceManager:getTexture("button"))
+local offset = 45
+button["left"] = Button.create(-264, -deviceScreenHeight+offset, resourceManager:getTexture("leftBtn"))
+button["jump"] = Button.create(-132, -deviceScreenHeight+offset, resourceManager:getTexture("jumpBtn"))
+button["powerup"] = Button.create(0, -deviceScreenHeight+offset, resourceManager:getTexture("powerUpBtn"))
+button["shoot"] = Button.create(132, -deviceScreenHeight+offset, resourceManager:getTexture("shootBtn"))
+button["right"] = Button.create(264, -deviceScreenHeight+offset, resourceManager:getTexture("rightBtn"))
+
+ --blockGenerator:make()
 
 ----------------------------
 -- Spawn Wall
@@ -113,5 +119,15 @@ end
 
 --Floor testing()
 bodies[0] = world:addBody( MOAIBox2DBody.STATIC )
-bodies[0]:setTransform( 0, -400 )  
-fixtures[0] = bodies[0]:addRect( -300, -24, 300, 24 )
+bodies[0]:setTransform( 0, -330 )  
+fixtures[0] = bodies[0]:addRect( -320, -10, 320, 10 )
+
+-- Right Wall
+bodies[1] = world:addBody( MOAIBox2DBody.STATIC )
+bodies[1]:setTransform( 330, 75 )  
+fixtures[1] = bodies[1]:addRect( -10, -390, 10, 390 )
+
+-- Left Wall
+bodies[2] = world:addBody( MOAIBox2DBody.STATIC )
+bodies[2]:setTransform( -330, 75 )  
+fixtures[2] = bodies[2]:addRect( -10, -390, 10, 390 )

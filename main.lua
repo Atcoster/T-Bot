@@ -47,6 +47,8 @@ bullet = {}
 
 blocks = {}
 blockGenerator = {}
+blockMetal = {}
+blockPowerup = {}
 
 resourceManager = {}
 
@@ -65,13 +67,9 @@ require("Helpers/block")
 require("Helpers/button")
 require("Helpers/view")
 
-
 -- Mechanics
 require("Mechanics/blockinator")
 require("Mechanics/player")
 require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
 require("game")
-
-
-

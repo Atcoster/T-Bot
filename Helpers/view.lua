@@ -7,14 +7,14 @@ View.__index = View
 ----------------------------
 -- Constructor
 ----------------------------
-function View.create(imgSource)
+function View.create(texture)
   
   local vw = {}
   setmetatable(vw, View)
   
-  vw._x = 640
+  vw._x = 0
   vw._y = 0
-  vw._imgSource = imgSource
+  vw._texture= texture
   vw._sprite = MOAIGfxQuad2D.new()
   vw._prop =  MOAIProp2D.new()
   vw._state = false
@@ -32,13 +32,9 @@ end
 --Create view (Internal function)
 function View:make()
   
-  --Texture
-  local texture = MOAIImage.new()
-  texture:load(self._imgSource)
-  local w, h = texture:getSize()
-  
   --Sprite
-  self._sprite:setTexture(texture)
+  local w, h = self._texture:getSize()
+  self._sprite:setTexture(self._texture)
   self._sprite:setRect(-w, -h, w, h)
   
   --Prop
@@ -47,7 +43,7 @@ function View:make()
 
   --Insert prop
   layer:insertProp(self._prop)
-  partition:insertProp(self._prop)
+  --partition:insertProp(self._prop)
   
 end
 

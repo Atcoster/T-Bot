@@ -29,29 +29,27 @@ function Blockinator:make()
   local y = self._startY
   local x = 0
   
-  table.insert(blocks, Block.create(x-(blocksize*12), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x-(blocksize*10), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x-(blocksize*8), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x-(blocksize*6), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x-(blocksize*4), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x-(blocksize*2), y+(blocksize*0)))
+  table.insert(blocks, Block.create(x-(blocksize*12), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x-(blocksize*10), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x-(blocksize*8), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x-(blocksize*6), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x-(blocksize*4), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x-(blocksize*2), y+(blocksize*0), "Block"))
   
-  table.insert(blocks, Block.create(x+(blocksize*0), y+(blocksize*0)))
+  table.insert(blocks, Block.create(x+(blocksize*0), y+(blocksize*0), "Block"))
   
-  table.insert(blocks, Block.create(x+(blocksize*2), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x+(blocksize*4), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x+(blocksize*6), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x+(blocksize*8), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x+(blocksize*10), y+(blocksize*0)))
-  table.insert(blocks, Block.create(x+(blocksize*12), y+(blocksize*0)))
+  table.insert(blocks, Block.create(x+(blocksize*2), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x+(blocksize*4), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x+(blocksize*6), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x+(blocksize*8), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x+(blocksize*10), y+(blocksize*0), "Block"))
+  table.insert(blocks, Block.create(x+(blocksize*12), y+(blocksize*0), "Block"))
 
 end
 
 function Blockinator:drop()
   
-  --self._movement = self._movement - 1
-  
-  for key,value in pairs(blocks) do --actualcode
+  for key,value in pairs(blocks) do
     
     if blocks[key]:getDestructionState() == false then
       

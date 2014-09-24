@@ -8,7 +8,7 @@ Block.__index = Block
 -- Constructor
 ----------------------------
 
-function Block.create(x, y)
+function Block.create(x, y, blockType)
 
   local blk = {}
   setmetatable(blk, Block)
@@ -25,8 +25,14 @@ function Block.create(x, y)
   
   --Fixture
   blk._fixture = blk._body:addRect( -blk._size, -blk._size, blk._size, blk._size )
-  blk._fixture:setSensor(true)
-  blk._fixture.userdata = "Block"
+  
+  if blockType == "Block" then
+    
+    blk._fixture:setSensor(true)
+  
+  end
+  
+  blk._fixture.userdata = blockType
   
   -- Texture
   blk._image = MOAIGfxQuad2D.new()
@@ -34,33 +40,46 @@ function Block.create(x, y)
   
   --Collision
   function handleCollision(phase, a, b, arbiter)
-  
+    
     if phase == MOAIBox2DArbiter.BEGIN then
       
       if b.userdata == "Bullet" and b ~= nil then
         
-        blk:destruction()
         
-        for key,value in pairs(bullet) do --actualcode
+        local x,y = b:getBody():getPosition()
+        
+        if a.userdata ~= "Metal" then
+          blk:destruction()
+        end
+        
+        for key,value in pairs(bullet) do
     
           if bullet[key]:getBulletBody() == b:getBody() then
             
             bullet[key]:destruction()
           
           end
-        
+           
         end
        
       end
       
     elseif phase == MOAIBox2DArbiter.END then
-    
+      
+      if b.userdata == "Bullet" and b ~= nil and a.userdata ~= "Metal" then
+        
+        print("X= "..x.." Y="..y)
+        table.insert(blockMetal, Block.create(x, y, "Metal"))
+        
+      end
+      
+      
+      
     end
 
   end
   
   blk._fixture:setCollisionHandler(handleCollision, MOAIBox2DArbiter.BEGIN + MOAIBox2DArbiter.END)
-  
   
   blk:make()
   
@@ -72,8 +91,20 @@ end
 -- Functions
 ----------------------------
 function Block:make()
-
-  self._image:setTexture(resourceManager:getTexture("box"))
+  
+  if self._fixture.userdata == "Block" then
+   
+    self._image:setTexture(resourceManager:getTexture("box"))
+   
+  elseif self._fixture.userdata == "Metal" then
+    
+    self._image:setTexture(resourceManager:getTexture("metal"))
+    
+  end
+  
+  --print("type: "..tostring(self._fixture.userdata))
+  
+  
   self._image:setRect(-24, -24, 24, 24)
 
   self._prop:setDeck(self._image)
