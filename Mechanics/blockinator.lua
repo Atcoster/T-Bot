@@ -6,6 +6,39 @@ Blockinator.__index = Blockinator
 
 local blocksize = 24
 
+local boxType = {"wood", "metal", "bomb", "wall", "freeze", "fire",
+                "part1", "part2", "part3", "part4",
+                "part5", "part6", "part7", "part8",
+                "part9", "part10"}
+
+--[[
+  
+  1 = wood
+  2 = metal
+  3 = bomb
+  4 = wall
+  5 = freeze
+  6 = fire
+  parts
+  
+  7 - 16
+]]--
+local grid = {
+  "2", "2", "2", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2",
+  "2", "11", "2", "1", "1", "3", "10", "3", "1", "1", "2", "12", "2",
+  "2", "2", "2", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2",
+  "1", "3", "1", "1", "1", "1", "1", "1", "1", "1", "1", "3", "1",
+  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
+  "1", "1", "6", "1", "1", "2", "7", "2", "1", "1", "5", "1", "1",
+  "1", "1", "1", "1", "3", "2", "2", "2", "3", "1", "1", "1", "1",
+  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
+  "1", "8", "1", "1", "1", "1", "1", "1", "1", "1", "1", "9", "1",
+  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1",
+  "4", "4", "4", "4", "1", "4", "4", "4", "4", "1", "4", "4", "4",
+  "4", "4", "4", "4", "1", "4", "4", "4", "4", "1", "4", "4", "4",
+  
+  }
+
 ----------------------------
 -- Constructor
 ----------------------------
@@ -26,53 +59,33 @@ end
 ----------------------------
 function Blockinator:make()
   
-  local y = self._startY
-  local x = 0
-  
-  table.insert(blocks, Block.create(x-(blocksize*12), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x-(blocksize*10), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x-(blocksize*8), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x-(blocksize*6), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x-(blocksize*4), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x-(blocksize*2), y+(blocksize*0), "Block"))
-  
-  table.insert(blocks, Block.create(x+(blocksize*0), y+(blocksize*0), "Block"))
-  
-  table.insert(blocks, Block.create(x+(blocksize*2), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x+(blocksize*4), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x+(blocksize*6), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x+(blocksize*8), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x+(blocksize*10), y+(blocksize*0), "Block"))
-  table.insert(blocks, Block.create(x+(blocksize*12), y+(blocksize*0), "Block"))
-
-end
-
-function Blockinator:drop()
-  
-  for key,value in pairs(blocks) do
-    
-    if blocks[key]:getDestructionState() == false then
-      
-      blocks[key]:getBlockBody():setTransform(blocks[key]:getBlockPosition("x"),blocks[key]:getBlockPosition("y")-(48))
-    
-    end
-    
+  -- Ceiling
+  for i=0, 12 do
+    table.insert(blocks, Block.create(-288+(blocksize*(i*2)), 398, "wall"))
   end
   
-end
-
-function Blockinator:getMovement()
+  local y = 350
+  local x = -288
   
-  for key,value in pairs(blocks) do --actualcode
+  local yCount = 0
+  local maxy = 13
+  
+  local xcount = 0
+  
+  for i=1, 156 do
     
-    if blocks[key]:getMovement() == false  then
+    local c = tonumber(grid[i])
     
-      return false
+    table.insert(blocks, Block.create(x+(blocksize*(xcount*2)), y-(blocksize*(yCount*2)), boxType[c]))
+    
+    xcount = xcount + 1
+    
+    if i == maxy then
       
-    else
-
-      return true
-      
+      xcount = 0
+      yCount = yCount + 1
+      maxy = maxy + 13
+    
     end
   
   end

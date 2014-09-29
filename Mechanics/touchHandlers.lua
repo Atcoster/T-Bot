@@ -58,12 +58,6 @@ function touch(x, y)
      
     end
     
-    if(touchedProp == button["jump"]:getProp()) then
-      
-      player:setJumpState(true)
-      
-    end
-    
     if(touchedProp == button["shoot"]:getProp()) then
       
       table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))

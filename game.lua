@@ -6,46 +6,19 @@ view["gamescreen"] = View.create(resourceManager:getTexture("background"))
 player = Player.create()
 blockGenerator = Blockinator.create()
 
-local offset = 45
+local offset = 75
+
+button["left"] = Button.create(-230, -deviceScreenHeight+offset, resourceManager:getTexture("leftBtn"))
+button["right"] = Button.create(-50, -deviceScreenHeight+offset, resourceManager:getTexture("rightBtn"))
+button["shoot"] = Button.create(200, -deviceScreenHeight+offset, resourceManager:getTexture("shootBtn"))
+
+--[[
 button["left"] = Button.create(-264, -deviceScreenHeight+offset, resourceManager:getTexture("leftBtn"))
-button["jump"] = Button.create(-132, -deviceScreenHeight+offset, resourceManager:getTexture("jumpBtn"))
-button["powerup"] = Button.create(0, -deviceScreenHeight+offset, resourceManager:getTexture("powerUpBtn"))
-button["shoot"] = Button.create(132, -deviceScreenHeight+offset, resourceManager:getTexture("shootBtn"))
-button["right"] = Button.create(264, -deviceScreenHeight+offset, resourceManager:getTexture("rightBtn"))
+button["right"] = Button.create(0, -deviceScreenHeight+offset, resourceManager:getTexture("rightBtn"))
+button["shoot"] = Button.create(200, -deviceScreenHeight+offset, resourceManager:getTexture("shootBtn"))
+--]]
+blockGenerator:make()
 
- --blockGenerator:make()
-
-----------------------------
--- Spawn Wall
-----------------------------
-function spawnBlock()
-  
-  blockGenerator:make()
-  
-  for key,value in pairs(blocks) do
-    
-    if blocks[key]:getDestructionState() == true then
-    
-      table.remove(blocks, key)
-      
-    end
-  
-  end
-  
-  if blockGenerator:getMovement() == true then
-  
-    blockGenerator:drop()
-    
-  end
-
-
-end
-
-timer = MOAITimer.new()
-timer:setSpan(5)
-timer:setMode(MOAITimer.LOOP)
-timer:setListener(MOAITimer.EVENT_TIMER_END_SPAN, spawnBlock)
-timer:start()
 
 ----------------------------------
 -- Animations
@@ -103,7 +76,7 @@ function update()
   for key,value in pairs(blocks) do
     
     if blocks[key]:getDestructionState() == false then
-    
+      
       blocks[key]:getBlockBody():setAwake(false)
       
     end
@@ -131,3 +104,12 @@ fixtures[1] = bodies[1]:addRect( -10, -390, 10, 390 )
 bodies[2] = world:addBody( MOAIBox2DBody.STATIC )
 bodies[2]:setTransform( -330, 75 )  
 fixtures[2] = bodies[2]:addRect( -10, -390, 10, 390 )
+
+--[[
+bodies[3] = world:addBody( MOAIBox2DBody.STATIC )
+bodies[3]:setTransform( -330, 75 )  
+fixtures[3] = bodies[2]:addRect( -10, -390, 10, 390 )
+fixtures[3].userdata = {"wood", "explodable"}
+
+print(tostring(fixtures[3].userdata[1]))
+--]]

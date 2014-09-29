@@ -18,6 +18,7 @@ function Player.create()
   pl._jumpState = false
   
   pl._body = world:addBody(MOAIBox2DBody.DYNAMIC)
+  pl._body:setTransform(0, -275)
   pl._fixture = pl._body:addRect(-48, -42, 48, 42)
   
   -- Texture

@@ -38,32 +38,45 @@ function ResourceManager:loadResources()
   ------------------------
   -- Box Textures
   ------------------------
-  images["box"] = MOAIImageTexture.new()
-  images["box"]:load("Assets/img/blocks/Box.png")
-  images["box"]:invalidate()
+  images["wood"] = MOAIImageTexture.new()
+  images["wood"]:load("Assets/img/blocks/Wood.png")
+  images["wood"]:invalidate()
   
   images["metal"] = MOAIImageTexture.new()
-  images["metal"]:load("Assets/img/blocks/Metal-Box.png")
+  images["metal"]:load("Assets/img/blocks/Metal.png")
   images["metal"]:invalidate()
+  
+  images["bomb"] = MOAIImageTexture.new()
+  images["bomb"]:load("Assets/img/blocks/Bomb.png")
+  images["bomb"]:invalidate()
+  
+  images["wall"] = MOAIImageTexture.new()
+  images["wall"]:load("Assets/img/blocks/Wall.png")
+  images["wall"]:invalidate()
+  
+  --Parts
+  for i = 1, 10 do
+    
+    local index = "part"..tostring(i)
+    local path = "Assets/img/blocks/Part"..tostring(i)..".png"
+    
+    images[index] = MOAIImageTexture.new()
+    images[index]:load(path)
+    images[index]:invalidate()
+  
+  end
   
   ------------------------
   -- Powerup textures
   ------------------------
-  images["wallUp"] = MOAIImageTexture.new()
-  images["wallUp"]:load("Assets/img/blocks/Wall-Box.png")
-  images["wallUp"]:invalidate()
   
-  images["lightning"] = MOAIImageTexture.new()
-  images["lightning"]:load("Assets/img/blocks/Ligtning-Box.png")
-  images["lightning"]:invalidate()
+  images["fire"] = MOAIImageTexture.new()
+  images["fire"]:load("Assets/img/blocks/Fire-Missile.png")
+  images["fire"]:invalidate()
   
-  images["laser"] = MOAIImageTexture.new()
-  images["laser"]:load("Assets/img/blocks/Laser-Box.png")
-  images["laser"]:invalidate()
-  
-  images["bomb"] = MOAIImageTexture.new()
-  images["bomb"]:load("Assets/img/blocks/Bomb-Box.png")
-  images["bomb"]:invalidate()
+  images["freeze"] = MOAIImageTexture.new()
+  images["freeze"]:load("Assets/img/blocks/Freeze-Missile.png")
+  images["freeze"]:invalidate()
   
   ------------------------
   -- Player Textures
@@ -87,19 +100,9 @@ function ResourceManager:loadResources()
   images["rightBtn"]:load("Assets/img/buttons/right.png")
   images["rightBtn"]:invalidate()
   
-  images["jumpBtn"] = MOAIImageTexture.new()
-  images["jumpBtn"]:load("Assets/img/buttons/up.png")
-  images["jumpBtn"]:invalidate()
-  
   images["shootBtn"] = MOAIImageTexture.new()
   images["shootBtn"]:load("Assets/img/buttons/shoot.png")
   images["shootBtn"]:invalidate()
-  
-  images["powerUpBtn"] = MOAIImageTexture.new()
-  images["powerUpBtn"]:load("Assets/img/buttons/pu.png")
-  images["powerUpBtn"]:invalidate()
-  
-  
   
 end
 
