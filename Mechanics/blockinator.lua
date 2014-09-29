@@ -59,6 +59,11 @@ end
 ----------------------------
 function Blockinator:make()
   
+  -- test
+  table.insert(blocks, Block.create(0, -450, "m_wall"))
+  table.insert(blocks, Block.create(50, -450, "m_wall"))
+  
+  
   -- Ceiling
   for i=0, 12 do
     table.insert(blocks, Block.create(-288+(blocksize*(i*2)), 398, "wall"))

@@ -16,9 +16,10 @@ function Player.create()
   pl._direction = 0
   pl._jumpHeight = 10
   pl._jumpState = false
+  pl._starty = -350
   
   pl._body = world:addBody(MOAIBox2DBody.DYNAMIC)
-  pl._body:setTransform(0, -275)
+  pl._body:setTransform(0, pl._starty)
   pl._fixture = pl._body:addRect(-48, -42, 48, 42)
   
   -- Texture
@@ -78,19 +79,11 @@ function Player:setDirection(dir)
     
 end
 
-function Player:move()
+function Player:move(x,y)
   
-  local x,y = self._body:getPosition()
   self._body:setAwake(true)
-  self._body:setTransform(x + (self._direction), y)
+  self._body:setTransform(x, self._starty)
   
-end
-
-function Player:jump()
-    
-  local x,y = self._body:getPosition()
-  self._body:setTransform(x, y + self._jumpHeight)
-    
 end
 
 function Player:getPlayerBody()

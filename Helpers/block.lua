@@ -4,6 +4,8 @@
 Block = {}
 Block.__index = Block
 
+local bombCount = 1
+
 ----------------------------
 -- Constructor
 ----------------------------
@@ -16,7 +18,7 @@ function Block.create(x, y, blockType)
   blk._size = 24
   blk._x = x
   blk._y = y
-  blk._movement = true
+  blk._movement = false
   blk._destruction = false
   
   --Body
@@ -27,7 +29,20 @@ function Block.create(x, y, blockType)
   blk._fixture = blk._body:addRect( -blk._size, -blk._size, blk._size, blk._size )
   blk._fixture:setSensor(true)
   
-  blk._fixture.userdata = {blockType, "safe"}
+  if blockType == "bomb" then 
+    
+    blk._fixture.userdata = {blockType, "safe", bombCount}
+    bombCount = bombCount + 1
+    
+  elseif blockType == "m_wall" then
+  
+    blk._fixture.userdata = {"wall", "moveable", 0}
+  
+  else
+  
+    blk._fixture.userdata = {blockType, "safe", 0}
+  
+  end
   
   -- Texture
   blk._image = MOAIGfxQuad2D.new()
@@ -36,12 +51,13 @@ function Block.create(x, y, blockType)
   --Collision
   function handleCollision(phase, a, b, arbiter)
     
+    -- Set all boxes around surrounding the bomb to bombable
     if a.userdata[1] == "bomb" then
-      --b.userdata[2] = "bombable"
       
-      
-      
-      --print("Box: "..b.userdata[1].." state: "..b.userdata[2])
+      if b.userdata[1] ~= nil then
+        b.userdata[3] = a.userdata[3]
+        b.userdata[2] = "danger"
+      end
       
     end
     
@@ -49,14 +65,28 @@ function Block.create(x, y, blockType)
       
       if b.userdata == "Bullet" and b ~= nil then
         
-        local x,y = b:getBody():getPosition()
-        
-        if a.userdata[1] == "wood" then
+        if a.userdata[1] == "wood" or a.userdata[1] == "bomb" then
+          
           blk:destruction()
+          
+        end
+        
+        if a.userdata[1] == "bomb" then
+          
+           for key,value in pairs(blocks) do
+    
+            if blocks[key]:getUserdata(2) == "danger" and blocks[key]:getUserdata(3) == a.userdata[3] then
+              
+              blocks[key]:destruction()
+            
+            end
+             
+          end
+          
         end
         
         for key,value in pairs(bullet) do
-    
+          
           if bullet[key]:getBulletBody() == b:getBody() then
             
             bullet[key]:destruction()
@@ -99,42 +129,31 @@ function Block:make()
   
 end
 
-function Block:getBlockBody()
-  
-  return self._body
-  
-end
-
-function Block:getUserdata()
-  
-  return self._fixture.userdata
-  
-end
-
-function Block:setDestruction(state)
-  
-  self._destruction = state
-  
-end
-
-function Block:getMovement()
-  
-  return self._movement
-  
-end
-
-function Block:getDestructionState()
-  
-  return self._destruction
-  
-end
-
 function Block:destruction()
   
-  self._destruction = true
-  layer:removeProp(self._prop)
-  self._body:destroy()
+  if self._body ~= nil then
+    self._destruction = true
+    layer:removeProp(self._prop)
+    self._body:destroy()
+  end
   
 end
 
+function Block:moveBlock(direction)
+    
+    local x,y = self._body:getPosition()
+    self._body:setTransform(x + direction,y)
+    
+end
 
+function Block:getBlockBody() return self._body end
+
+function Block:getBlockProp() return self._prop end
+
+function Block:getUserdata(index) return self._fixture.userdata[index] end
+
+function Block:getDestructionState() return self._destruction end
+function Block:setDestruction(state) self._destruction = state end
+
+function Block:getMovement() return self._movement end
+function Block:setMovement(state) self._movement = state end

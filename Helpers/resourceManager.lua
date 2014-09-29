@@ -29,11 +29,11 @@ function ResourceManager:loadResources()
   ------------------------
   -- Views
   ------------------------
-  images["background"] = MOAIImage.new()
-  images["background"]:load("Assets/img/blueBG.png")
-  
-  local w,h = images["background"]:getSize()
-  images["background"] = images["background"]:resize(w/5, h/5)
+  images["background"] = MOAIImageTexture.new()
+  images["background"]:load("Assets/img/BlueBG.png")
+  images["background"]:invalidate()
+  --local w,h = images["background"]:getSize()
+  --images["background"] = images["background"]:resize(w/5, h/5)
   
   ------------------------
   -- Box Textures
@@ -92,17 +92,6 @@ function ResourceManager:loadResources()
   ------------------------
   -- Buttons
   ------------------------
-  images["leftBtn"] = MOAIImageTexture.new()
-  images["leftBtn"]:load("Assets/img/buttons/left.png")
-  images["leftBtn"]:invalidate()
-  
-  images["rightBtn"] = MOAIImageTexture.new()
-  images["rightBtn"]:load("Assets/img/buttons/right.png")
-  images["rightBtn"]:invalidate()
-  
-  images["shootBtn"] = MOAIImageTexture.new()
-  images["shootBtn"]:load("Assets/img/buttons/shoot.png")
-  images["shootBtn"]:invalidate()
   
 end
 
