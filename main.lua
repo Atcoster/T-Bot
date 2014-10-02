@@ -2,17 +2,17 @@
 -- MOAI Setup
 ----------------------------
 local gameName = "T-Bot"
---[[
 local screenWidth = 320
 local screenHeight = 480
 
-
-
 -- Device Screen setup
---deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
-deviceScreenWidth  = MOAIEnvironment.horizontalResolution or 1024
---deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
-deviceScreenHeight = MOAIEnvironment.verticalResolution or 9/16*deviceScreenWidth
+-- FOR PC USE!!!
+deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
+deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
+
+-- FOR MOBILE USE!!!
+--deviceScreenWidth  = MOAIEnvironment.horizontalResolution or 1024
+--deviceScreenHeight = MOAIEnvironment.verticalResolution or 9/16*deviceScreenWidth
 
 -- Open a window for testing, used on pc, skipped when on mobile
 MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
@@ -20,10 +20,11 @@ MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
 -- Making the viewport
 viewport = MOAIViewport.new()
 viewport:setSize(deviceScreenWidth, deviceScreenHeight)
-viewport:setScale(deviceScreenWidth, deviceScreenHeight)
+viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
+--viewport:setOffset(-100, -100)
 --viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
---]]
 
+--[[
 gameWidth = 480
 gameHeight = 320
 screenXOffset = 0
@@ -56,6 +57,7 @@ local realAspect = deviceHeight / deviceWidth
 viewport = MOAIViewport.new()
 viewport:setSize ( screenXOffset, screenYOffset, screenXOffset + screenWidth, screenYOffset + screenHeight )
 viewport:setScale ( gameWidth, gameHeight )
+--]]
 
 -- Adding layers
 layer = MOAILayer2D.new()
