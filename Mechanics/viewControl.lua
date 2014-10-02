@@ -79,6 +79,27 @@ function ViewControl:loadLevelSelectMenu()
   view["selectView"] = View.create(resourceManager:getTexture("selectbackground"))
   
   button["levelDownButton"] = Button.create(0, -440, resourceManager:getTexture("levelSelectButton"))
+  button["levelUpButton"] = Button.create(0, 440, resourceManager:getTexture("levelSelectButton"))
+  button["levelUpButton"]:getProp():setRot(180)
+  
+  button["levelBackButton"] = Button.create(250, -390, resourceManager:getTexture("backButton"))
+  
+  --Levels
+  button["levelOne"] = Button.create(0, -280, resourceManager:getTexture("levelActiveButton"))
+  text["levelOne"] = TextField.create(-16, -322, 50, 75, "1", 55)
+  
+  button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelInactiveButton"))
+  text["levelTwo"] = TextField.create(-176, -130, 50, 75, "2", 55)
+  
+  button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelInactiveButton"))
+  text["levelThree"] = TextField.create(150, -132, 50, 75, "3", 55)
+  
+  button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelInactiveButton"))
+  text["levelFour"] = TextField.create(150, 58, 50, 75, "4", 55)
+  
+  button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelInactiveButton"))
+  text["levelFive"] = TextField.create(-16, 248, 50, 75, "5", 55)
+  
   
 end
 
