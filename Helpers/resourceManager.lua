@@ -29,11 +29,18 @@ function ResourceManager:loadResources()
   ------------------------
   -- Views
   ------------------------
-  images["background"] = MOAIImageTexture.new()
-  images["background"]:load("Assets/img/BlueBG.png")
-  images["background"]:invalidate()
-  --local w,h = images["background"]:getSize()
-  --images["background"] = images["background"]:resize(w/5, h/5)
+  images["GameBackground"] = MOAIImageTexture.new()
+  images["GameBackground"]:load("Assets/img/BlueBG.png")
+  images["GameBackground"]:invalidate()
+  
+  images["Mainbackground"] = MOAIImageTexture.new()
+  images["Mainbackground"]:load("Assets/img/Views/Main/Main.png")
+  images["Mainbackground"]:invalidate()
+  
+  images["selectbackground"] = MOAIImageTexture.new()
+  images["selectbackground"]:load("Assets/img/Views/Levels/level-background.png")
+  images["selectbackground"]:invalidate()
+  
   
   ------------------------
   -- Box Textures
@@ -53,6 +60,9 @@ function ResourceManager:loadResources()
   images["wall"] = MOAIImageTexture.new()
   images["wall"]:load("Assets/img/blocks/Wall.png")
   images["wall"]:invalidate()
+  
+  images["arrow"] = MOAITexture.new()
+  images["arrow"]:load("Assets/img/blocks/arrow-block.png")
   
   --Parts
   for i = 1, 10 do
@@ -92,6 +102,46 @@ function ResourceManager:loadResources()
   ------------------------
   -- Buttons
   ------------------------
+  -- Main menu buttons
+  images["mainMenuButton"] = MOAITexture.new()
+  images["mainMenuButton"]:load("Assets/img/Views/Main/clean.png")
+  
+  images["mainMenuButtonHover"] = MOAITexture.new()
+  images["mainMenuButtonHover"]:load("Assets/img/Views/Main/tbotjes.png")
+  
+  -- Level Select buttons
+  images["levelActiveButton"] = MOAITexture.new()
+  images["levelActiveButton"]:load("Assets/img/Views/Levels/stage-active.png")
+  
+  images["levelInactiveButton"] = MOAITexture.new()
+  images["levelInactiveButton"]:load("Assets/img/Views/Levels/stage-inactive.png")
+  
+  images["levelSelectButton"] = MOAITexture.new()
+  images["levelSelectButton"]:load("Assets/img/Views/Levels/level-arrow.png")
+  
+  -- In game buttons
+  images["activeFreezeButton"] = MOAITexture.new()
+  images["activeFreezeButton"]:load("Assets/img/buttons/Freeze-active.png")
+  
+  images["inactiveFreezeButton"] = MOAITexture.new()
+  images["inactiveFreezeButton"]:load("Assets/img/buttons/Freeze-inactive.png")
+  
+  images["activeFireButton"] = MOAITexture.new()
+  images["activeFireButton"]:load("Assets/img/buttons/Fire-active.png")
+  
+  images["inactiveFireButton"] = MOAITexture.new()
+  images["inactiveFireButton"]:load("Assets/img/buttons/Fire-inactive.png")
+  
+  images["inactivePowerup"] = MOAITexture.new()
+  images["inactivePowerup"]:load("Assets/img/buttons/inactive.png")
+  
+  ------------------------
+  -- Spritesheets
+  ------------------------
+  images["explosion"] = MOAITileDeck2D.new()
+  images["explosion"]:setTexture("Assets/img/Explosions/explosion-sprite.png")
+  images["explosion"]:setSize(9,1)
+  images["explosion"]:setRect(-72, -72, 72, 72)
   
 end
 

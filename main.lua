@@ -6,8 +6,10 @@ local screenWidth = 320
 local screenHeight = 480
 
 -- Device Screen setup
-deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
-deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
+--deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
+deviceScreenWidth  = MOAIEnvironment.horizontalResolution or 1024
+--deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
+deviceScreenHeight = MOAIEnvironment.verticalResolution or 9/16*deviceScreenWidth
 
 -- Open a window for testing, used on pc, skipped when on mobile
 MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
@@ -30,7 +32,7 @@ world = MOAIBox2DWorld.new();
 world:setGravity(gravityX, gravityY);
 world:setUnitsToMeters(1/30);
 world:start();
---layer:setBox2DWorld(world);
+layer:setBox2DWorld(world);
 
 -- Create partition
 partition = MOAIPartition.new()
@@ -47,14 +49,16 @@ bullet = {}
 
 blocks = {}
 blockGenerator = {}
-blockMetal = {}
-blockPowerup = {}
 
 resourceManager = {}
 
 mouseStartX = {}
 
---testing porpuses: ground
+gameView = {}
+gameState = {}
+
+
+-- Invisable walls
 bodies = {}
 fixtures = {}
 images = {}
@@ -68,10 +72,12 @@ require("Helpers/view")
 require("Helpers/block")
 require("Helpers/button")
 require("Helpers/view")
+require("Helpers/textfield")
 
 -- Mechanics
 require("Mechanics/blockinator")
 require("Mechanics/player")
 require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
+require("Mechanics/viewControl")
 require("game")

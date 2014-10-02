@@ -29,28 +29,54 @@ if MOAIInputMgr.device.pointer then
         --------------------
         ---- Mouse down ----
         --------------------
-        
-        --------------------
-        ---- Player 
-        --------------------
-        if(touchedProp == player:getPlayerProp()) then
+         if gameState == "Menu" then
           
-          playerActionTimer:start()
-
-        end
-      
-        --------------------
-        ---- Swipe 
-        --------------------
-        for key,value in pairs(blocks) do
-          
-          if touchedProp == blocks[key]:getBlockProp() then
+          if(touchedProp == text["mainStart"]:getTextProp()) then
             
-            blocks[key]:setMovement(true)
-           
+            gameView:loadLevel()
+
+          end
+          
+         end
+        
+        
+        if gameState == "Playfield" then
+          --------------------
+          ---- Player 
+          --------------------
+          if(touchedProp == player:getPlayerProp()) then
+            
+            playerActionTimer:start()
+
+          end
+        
+          --------------------
+          ---- Blocks
+          --------------------
+          for key,value in pairs(blocks) do
+            
+            if touchedProp == blocks[key]:getBlockProp() then
+              
+              -- rotating blocks
+              if blocks[key]:getUserdata(1) == "arrow" then
+                  
+                  blocks[key]:getBlockProp():moveRot(-90, 0.5)
+                  
+              end
+              
+              -- Swiping - Under construction
+              for key2,value2 in pairs(blocks) do
+                
+                if blocks[key2]:getUserdata(2) == "moveable" then
+                  blocks[key2]:setMovement(true)
+                end
+                
+              end
+             
+            end
             
           end
-           
+        
         end
         
       else
@@ -62,35 +88,39 @@ if MOAIInputMgr.device.pointer then
         --------------------
         ---- Player 
         --------------------
-        if(touchedProp == player:getPlayerProp()) then
-          
-           playerActionTimer:stop()
-
-        end
-       
-        if player:getMovement() == true then
-          
-          player:setMovement(false)
-        
-        else
+        if gameState == "Playfield" then
           
           if(touchedProp == player:getPlayerProp()) then
           
-             table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
+             playerActionTimer:stop()
 
           end
-        
-        end
-      
-        --------------------
-        ---- Swipe 
-        --------------------
-        for key,value in pairs(blocks) do
+         
+          if player:getMovement() == true then
+            
+            player:setMovement(false)
           
-          if blocks[key]:getUserdata(2) == "moveable" then
-            blocks[key]:setMovement(false)
+          else
+            
+            if(touchedProp == player:getPlayerProp()) then
+            
+               table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
+
+            end
+          
           end
-           
+        
+          --------------------
+          ---- Swipe 
+          --------------------
+          for key,value in pairs(blocks) do
+            
+            if blocks[key]:getUserdata(2) == "moveable" then
+              blocks[key]:setMovement(false)
+            end
+             
+          end
+          
         end
         
       end

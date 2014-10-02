@@ -54,7 +54,7 @@ function Block.create(x, y, blockType)
     -- Set all boxes around surrounding the bomb to bombable
     if a.userdata[1] == "bomb" then
       
-      if b.userdata[1] ~= nil then
+      if b.userdata[1] ~= nil and b.userdata[1] ~= "wall" and b.userdata[1] ~= "arrow" then
         b.userdata[3] = a.userdata[3]
         b.userdata[2] = "danger"
       end
@@ -63,15 +63,28 @@ function Block.create(x, y, blockType)
     
     if phase == MOAIBox2DArbiter.BEGIN then
       
+      --------------------------
+      -- General
+      --------------------------
       if b.userdata == "Bullet" and b ~= nil then
         
-        if a.userdata[1] == "wood" or a.userdata[1] == "bomb" then
+        
+        ----------------------------------------------------
+        -- Ignore destruction at certain blocks
+        ----------------------------------------------------
+        if a.userdata[1] ~= "wall" and a.userdata[1] ~= "metal" and a.userdata[1] ~= "bomb" and a.userdata[1] ~= "arrow" then
           
           blk:destruction()
           
         end
         
+        --------------------------
+        -- Bomb Mechanics
+        --------------------------
         if a.userdata[1] == "bomb" then
+          
+          blk:explosion(a:getBody():getPosition())
+          blk:destruction()
           
            for key,value in pairs(blocks) do
     
@@ -85,20 +98,74 @@ function Block.create(x, y, blockType)
           
         end
         
-        for key,value in pairs(bullet) do
-          
-          if bullet[key]:getBulletBody() == b:getBody() then
+        --------------------------
+        -- Bullet rotation
+        --------------------------
+        if b.userdata == "Bullet" and b ~= nil then
+        
+          if a.userdata[1] == "arrow" then
             
-            bullet[key]:destruction()
-          
+            local arrowprop = blk:getBlockProp()
+            local rotation = arrowprop:getRot()
+            
+            function changeDirection()
+    
+              for key,value in pairs(bullet) do
+            
+                if bullet[key]:getBulletBody() == b:getBody() then
+                
+                  if rotation > -10 and rotation < 10 then
+                     
+                    bullet[key]:setDirection("up", a:getBody():getPosition())
+
+                  elseif rotation > 260 and rotation < 280 then
+                  
+                    bullet[key]:setDirection("right", a:getBody():getPosition())
+                  
+                  elseif rotation > 170 and rotation < 190 then
+                  
+                    bullet[key]:setDirection("down", a:getBody():getPosition())
+                
+                  elseif rotation > 80 and rotation < 100 then
+                    
+                    bullet[key]:setDirection("left", a:getBody():getPosition())
+                    
+                  end
+              
+                end
+            
+              end
+                
+            end
+
+            local timer = MOAITimer.new()
+            timer:setSpan(0.1)
+            timer:setMode(MOAITimer.NORMAL)
+            timer:setListener(MOAITimer.EVENT_TIMER_END_SPAN, changeDirection)
+            timer:start()
+            
           end
-           
+          
+        end
+        
+        ----------------------------
+        -- Bullet destruction
+        ----------------------------
+        if a.userdata[1] ~= "arrow" then
+        
+          for key,value in pairs(bullet) do
+            
+            if bullet[key]:getBulletBody() == b:getBody() then
+              
+              bullet[key]:destruction()
+            
+            end
+             
+          end
+        
         end
        
       end
-      
-    elseif phase == MOAIBox2DArbiter.END then
-      
       
     end
 
@@ -143,6 +210,43 @@ function Block:moveBlock(direction)
     
     local x,y = self._body:getPosition()
     self._body:setTransform(x + direction,y)
+    
+end
+
+function Block:explosion(x,y)
+    
+  local explodeProp = MOAIProp2D.new()  
+    
+  local tiles = 9
+  local speed = 0.05
+  
+  explodeProp:setDeck(ResourceManager:getTexture("explosion"))
+  explodeProp:setLoc(x,y)
+  
+  layer:insertProp(explodeProp)
+
+  curve = MOAIAnimCurve.new()
+  curve:reserveKeys(tiles)
+
+  for i=1,tiles,1 do
+    
+    curve:setKey(i, speed * i, i)
+    
+  end
+
+  anim = MOAIAnim:new()
+  anim:reserveLinks(1)
+  anim:setLink(1, curve, explodeProp, MOAIProp2D.ATTR_INDEX)
+  anim:setMode(MOAITimer.LOOP)
+  anim:setSpan(tiles * speed)
+  anim:start()
+  
+  anim:setListener(MOAIAnim.EVENT_TIMER_END_SPAN, 
+  function()
+    anim:stop()
+    layer:removeProp(explodeProp)
+  end
+)
     
 end
 

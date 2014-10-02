@@ -14,8 +14,6 @@ function Player.create()
   
   pl._movement = false
   pl._direction = 0
-  pl._jumpHeight = 10
-  pl._jumpState = false
   pl._starty = -350
   
   pl._body = world:addBody(MOAIBox2DBody.DYNAMIC)
@@ -46,54 +44,43 @@ function Player:make()
   
   layer:insertProp(self._prop)
   
-end
+  ----------------------------------
+  -- Animations
+  ----------------------------------
+  local tiles = 4
+  local speed = 0.1
 
-function Player:getMovement()
-    
-    return self._movement
-    
-end
+  curve = MOAIAnimCurve.new()
+  curve:reserveKeys(tiles)
 
-function Player:getJumpState()
+  for i=1,tiles,1 do
+    
+    curve:setKey(i, speed * i, i)
+    
+  end
+
+  anim = MOAIAnim:new()
+  anim:reserveLinks(1)
+  anim:setLink(1, curve, self._prop, MOAIProp2D.ATTR_INDEX)
+  anim:setMode(MOAITimer.LOOP)
+  anim:setSpan(tiles * speed)
+  anim:start()
   
-  return self._jumpState
-  
 end
 
-function Player:setMovement(state)
-    
-    self._movement = state 
-    
-end
-
-function Player:setJumpState(state)
+function Player:move(direction)
   
-  self._jumpState = state
+  local x,y = self._body:getPosition()
   self._body:setAwake(true)
+  self._body:setTransform(x + direction,y)
   
 end
 
-function Player:setDirection(dir)
-    
-    self._direction = dir
-    
-end
+function Player:getMovement() return self._movement end
+function Player:setMovement(state) self._movement = state  end
 
-function Player:move(x,y)
-  
-  self._body:setAwake(true)
-  self._body:setTransform(x, self._starty)
-  
-end
+function Player:setDirection(dir) self._direction = dir end
 
-function Player:getPlayerBody()
-  
-  return self._body
-  
-end
+function Player:getPlayerBody() return self._body end
 
-function Player:getPlayerProp()
-  
-  return self._prop
-  
-end
+function Player:getPlayerProp() return self._prop end

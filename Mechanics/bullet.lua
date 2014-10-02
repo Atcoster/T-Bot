@@ -14,6 +14,7 @@ function Bullet.create(x,y)
   
   blt._speed = 5
   blt._destruction = false
+  blt._direction = "up"
   
   -- Body
   blt._body = world:addBody(MOAIBox2DBody.KINEMATIC)
@@ -52,19 +53,28 @@ end
 function Bullet:move()
   
   local x,y = self._body:getPosition()
-  self._body:setTransform(x, y + self._speed)
   
-end
-
-function Bullet:getBulletBody()
+  if self._direction == "up" then
+    
+    self._prop:setRot(0)
+    self._body:setTransform(x, y + self._speed)
+    
+  elseif self._direction == "right" then
+    
+    self._prop:setRot(270)
+    self._body:setTransform(x + self._speed, y)
+    
+  elseif self._direction == "down" then
+    
+    self._prop:setRot(180)
+    self._body:setTransform(x, y  - self._speed)
   
-  return self._body
+  elseif self._direction == "left" then
+    
+    self._prop:setRot(90)
+    self._body:setTransform(x - self._speed, y)
   
-end
-
-function Bullet:getDestructionState()
-  
-  return self._destruction
+  end
   
 end
 
@@ -75,5 +85,17 @@ function Bullet:destruction()
   self._body:destroy()
   
 end
+
+function Bullet:setDirection(state)
+  
+  self._direction = state
+
+end
+
+function Bullet:getBulletBody() return self._body end
+
+function Bullet:getDestructionState() return self._destruction end
+
+
 
 

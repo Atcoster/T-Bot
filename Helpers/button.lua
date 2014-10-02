@@ -42,7 +42,6 @@ function Button:make()
   --Prop
   self._prop:setDeck(self._sprite)
   self._prop:setLoc(self._x, self._y)
-  self._prop:setPriority(1)
 
   --Insert prop
   layer:insertProp(self._prop)
