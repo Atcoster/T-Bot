@@ -19,6 +19,10 @@ function Button.create(x, y, texture)
   btn._sprite = MOAIGfxQuad2D.new()
   btn._prop =  MOAIProp2D.new()
   
+  -- Powerups logic
+  btn._missileActive = false
+  btn._missileActivated = false
+  
   btn:make()
   
   --Return object
@@ -58,9 +62,10 @@ function Button:changeTexture(texture)
   
 end
 
--- Get prop
-function Button:getProp()
+function Button:setmissileActivation(state) self._missileActivated = state end
+function Button:getmissileActivation() return self._missileActivated end
 
-  return self._prop
+function Button:setMissileState(state) self._missileActive = state end
+function Button:getMissleState() return self._missileActive end
 
-end
+function Button:getProp() return self._prop end

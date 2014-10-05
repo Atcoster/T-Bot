@@ -16,6 +16,8 @@ function Player.create()
   pl._direction = 0
   pl._starty = -350
   
+  pl._weapon = "normal"
+  
   pl._body = world:addBody(MOAIBox2DBody.DYNAMIC)
   pl._body:setTransform(0, pl._starty)
   pl._fixture = pl._body:addRect(-48, -42, 48, 42)
@@ -84,3 +86,6 @@ function Player:setDirection(dir) self._direction = dir end
 function Player:getPlayerBody() return self._body end
 
 function Player:getPlayerProp() return self._prop end
+
+function Player:getWeaponType() return self._weapon end
+function Player:setWeaponType(wType) self._weapon = wType end

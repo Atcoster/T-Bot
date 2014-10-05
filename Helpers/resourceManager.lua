@@ -64,6 +64,9 @@ function ResourceManager:loadResources()
   images["arrow"] = MOAITexture.new()
   images["arrow"]:load("Assets/img/blocks/arrow-block.png")
   
+  images["frozenBomb"] = MOAITexture.new()
+  images["frozenBomb"]:load("Assets/img/blocks/bomb-frozen.png")
+  
   --Parts
   for i = 1, 10 do
     
@@ -98,6 +101,12 @@ function ResourceManager:loadResources()
   images["missile"] = MOAIImageTexture.new()
   images["missile"]:load("Assets/img/t-bot/missile.png")
   images["missile"]:invalidate()
+  
+  images["fireMissile"] = MOAITexture.new()
+  images["fireMissile"]:load("Assets/img/t-bot/Fire-missile.png")
+  
+  images["freezeMissile"] = MOAITexture.new()
+  images["freezeMissile"]:load("Assets/img/t-bot/Freeze-missile.png")
   
   ------------------------
   -- Buttons
@@ -135,13 +144,32 @@ function ResourceManager:loadResources()
   images["inactivePowerup"] = MOAITexture.new()
   images["inactivePowerup"]:load("Assets/img/buttons/inactive.png")
   
+  -- Overall Game buttons
+  images["backButton"] = MOAITexture.new()
+  images["backButton"]:load("Assets/img/Views/backBtn.png")
+  
   ------------------------
   -- Spritesheets
   ------------------------
   images["explosion"] = MOAITileDeck2D.new()
-  images["explosion"]:setTexture("Assets/img/Explosions/explosion-sprite.png")
+  images["explosion"]:setTexture("Assets/img/Animations/explosion-sprite.png")
   images["explosion"]:setSize(9,1)
   images["explosion"]:setRect(-72, -72, 72, 72)
+  
+  images["meltMetal"] = MOAITileDeck2D.new()
+  images["meltMetal"]:setTexture("Assets/img/Animations/metal-melt.png")
+  images["meltMetal"]:setSize(7,1)
+  images["meltMetal"]:setRect(-24, -24, 24, 24)
+  
+  images["destroyWood"] = MOAITileDeck2D.new()
+  images["destroyWood"]:setTexture("Assets/img/Animations/wood-destroy.png")
+  images["destroyWood"]:setSize(7,1)
+  images["destroyWood"]:setRect(-24, -24, 24, 24)
+  
+  images["freezeBomb"] = MOAITileDeck2D.new()
+  images["freezeBomb"]:setTexture("Assets/img/Animations/bomb-freeze.png")
+  images["freezeBomb"]:setSize(7,1)
+  images["freezeBomb"]:setRect(-24, -24, 24, 24)
   
 end
 

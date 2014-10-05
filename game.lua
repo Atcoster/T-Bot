@@ -3,6 +3,6 @@
 ----------------------------
 gameView = ViewControl.create()
 
---gameView:loadMainMenu()
-gameView:loadLevelSelectMenu()
+gameView:loadMainMenu()
+--gameView:loadLevelSelectMenu()
 --gameView:loadLevel()

@@ -113,8 +113,8 @@ function ViewControl:loadLevel()
   
   view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
 
-  button["powerupButtonOne"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
-  button["powerupButtonTwo"] = Button.create(0, -440, resourceManager:getTexture("inactivePowerup"))
+  button["firePowerupButton"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
+  button["freezePowerupButton"] = Button.create(0, -440, resourceManager:getTexture("inactivePowerup"))
 
   player = Player.create()
   blockGenerator = Blockinator.create()
@@ -139,8 +139,6 @@ function ViewControl:loadLevel()
   end)
 
   function update() 
-  
-    local mouseX, mouseY = layer:wndToWorld(MOAIInputMgr.device.pointer:getLoc())
     
     ---------------
     -- Bullets
@@ -160,45 +158,6 @@ function ViewControl:loadLevel()
     ---------------
     for key,value in pairs(blocks) do
       
-      if blocks[key]:getUserdata(2) == "moveable" then
-        
-        if blocks[key]:getMovement() == true then
-          
-          local blockx, blocky = blocks[key]:getBlockBody():getPosition()
-          
-          -- Swipe movement
-          if mouseStartX < mouseX then
-            
-            if blockx > mouseX and blockx < (mouseX + 24) then
-              
-              blocks[key]:moveBlock(0)
-              mouseStartX = mouseX
-              
-            else
-              
-              blocks[key]:moveBlock(8)
-            
-            end
-          
-          else
-            
-            if blockx < mouseX and blockx > (mouseX - 24) then
-              
-              blocks[key]:moveBlock(0)
-              mouseStartX = mouseX
-              
-            else
-              
-              blocks[key]:moveBlock(-8)
-            
-            end
-            
-          end
-        
-        end
-        
-      end
-
       if blocks[key]:getDestructionState() == false then
         
         blocks[key]:getBlockBody():setAwake(false)
@@ -210,41 +169,39 @@ function ViewControl:loadLevel()
     ---------------
     -- Player
     ---------------
-    if player:getMovement() == true then
       
-      local playerX, playerY = player:getPlayerBody():getPosition()
-      
-      -- Swipe movement
-      if mouseStartX < mouseX then
-        
-        if playerX > mouseX and playerX < (mouseX + 24) then
-          
-          player:move(0)
-          mouseStartX = mouseX
-          
-        else
-          
-          player:move(10)
-        
-        end
-      
-      else
-        
-        if playerX < mouseX and playerX > (mouseX - 24) then
-          
-          player:move(0)
-          mouseStartX = mouseX
-          
-        else
-          
-          player:move(-10)
-        
-        end
-        
-      end
+    local playerX, playerY = player:getPlayerBody():getPosition()
     
+    if playerX < mouseStartX then
+      
+      if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+        
+        player:move(0)
+        
+        
+      else
+      
+        player:move(8)
+      
+      end
+      
     end
-   
+    
+    if playerX > mouseStartX then
+      
+      if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+        
+        player:move(0)
+        
+        
+      else
+      
+        player:move(-8)
+      
+      end
+      
+    end
+  
   end
   
   ------------------------------

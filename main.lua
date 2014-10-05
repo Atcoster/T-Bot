@@ -72,7 +72,7 @@ world = MOAIBox2DWorld.new();
 world:setGravity(gravityX, gravityY);
 world:setUnitsToMeters(1/30);
 world:start();
-layer:setBox2DWorld(world);
+--layer:setBox2DWorld(world);
 
 -- Create partition
 partition = MOAIPartition.new()
@@ -92,7 +92,7 @@ blockGenerator = {}
 
 resourceManager = {}
 
-mouseStartX = {}
+mouseStartX = 0
 
 gameView = {}
 gameState = {}

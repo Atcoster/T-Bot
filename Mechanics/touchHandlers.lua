@@ -1,17 +1,4 @@
-
-function movePlayer()
-    
-    player:setMovement(true)
-    
-end
-
-local playerActionTimer = MOAITimer.new()
-playerActionTimer:setSpan(0.1)
-playerActionTimer:setMode(MOAITimer.NORMAL)
-playerActionTimer:setListener(MOAITimer.EVENT_TIMER_END_SPAN, movePlayer)
-
-
-----------------------------
+---------------------------
 -- Mouse handlers
 ----------------------------
 if MOAIInputMgr.device.pointer then 
@@ -21,8 +8,16 @@ if MOAIInputMgr.device.pointer then
     function(isMouseDown)
       
       local x,y = MOAIInputMgr.device.pointer:getLoc()
-      mouseStartX = x
       local touchedProp = partition:propForPoint(layer:wndToWorld(x, y))
+      
+     
+      x,y = layer:wndToWorld(x, y)
+      
+      if y < -300 and y > -400 then
+         mouseStartX = x
+      end
+      
+     
       
       if(isMouseDown) then
         
@@ -33,21 +28,81 @@ if MOAIInputMgr.device.pointer then
           
           if(touchedProp == text["mainStart"]:getTextProp()) then
             
-            gameView:loadLevel()
+            gameView:loadLevelSelectMenu()
 
           end
           
          end
+         
+         if gameState == "LevelSelection" then
+          
+          if(touchedProp == text["levelOne"]:getTextProp()) then gameView:loadLevel() print("level selected") end
+          if(touchedProp == button["levelBackButton"]:getProp()) then gameView:loadMainMenu() end
+        
+         end
         
         
-        if gameState == "Playfield" then
+        if gameState == "Playfield" then        
           --------------------
-          ---- Player 
+          ---- Powerups 
           --------------------
-          if(touchedProp == player:getPlayerProp()) then
+          
+          if touchedProp == button["firePowerupButton"]:getProp() then
             
-            playerActionTimer:start()
-
+            if button["firePowerupButton"]:getmissileActivation() == true then
+            
+              if button["firePowerupButton"]:getMissleState() == false then
+                
+                button["firePowerupButton"]:changeTexture(resourceManager:getTexture("activeFireButton"))
+                button["firePowerupButton"]:setMissileState(true)
+                player:setWeaponType("fire")
+                
+              else
+                
+                button["firePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFireButton"))
+                button["firePowerupButton"]:setMissileState(false)
+                 player:setWeaponType("normal")
+                
+              end
+            
+            end
+          
+            if button["freezePowerupButton"]:getMissleState() == true then
+                
+              button["freezePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFreezeButton"))
+              button["freezePowerupButton"]:setMissileState(false)
+              
+            end
+            
+          end
+          
+          if touchedProp == button["freezePowerupButton"]:getProp() then
+            
+            if button["freezePowerupButton"]:getmissileActivation() == true then
+                
+              if button["freezePowerupButton"]:getMissleState() == false then
+                
+                button["freezePowerupButton"]:changeTexture(resourceManager:getTexture("activeFreezeButton"))
+                button["freezePowerupButton"]:setMissileState(true)
+                player:setWeaponType("freeze")
+                
+              else
+                
+                button["freezePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFreezeButton"))
+                button["freezePowerupButton"]:setMissileState(false)
+                player:setWeaponType("normal")
+                
+              end
+              
+              if button["firePowerupButton"]:getMissleState() == true then
+                
+                button["firePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFireButton"))
+                button["firePowerupButton"]:setMissileState(false)
+                
+              end
+                
+            end     
+            
           end
         
           --------------------
@@ -89,28 +144,14 @@ if MOAIInputMgr.device.pointer then
         ---- Player 
         --------------------
         if gameState == "Playfield" then
-          
+       
           if(touchedProp == player:getPlayerProp()) then
           
-             playerActionTimer:stop()
+            table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
 
           end
-         
-          if player:getMovement() == true then
-            
-            player:setMovement(false)
           
-          else
-            
-            if(touchedProp == player:getPlayerProp()) then
-            
-               table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
-
-            end
-          
-          end
-        
-          --------------------
+          -------------------
           ---- Swipe 
           --------------------
           for key,value in pairs(blocks) do

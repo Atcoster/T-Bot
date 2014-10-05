@@ -5,6 +5,8 @@ Block = {}
 Block.__index = Block
 
 local bombCount = 1
+local blockVictim = {}
+local victimCount = 1
 
 ----------------------------
 -- Constructor
@@ -21,6 +23,10 @@ function Block.create(x, y, blockType)
   blk._movement = false
   blk._destruction = false
   
+  blk._animProp = MOAIProp2D.new()  
+  blk._animation = MOAIAnim:new()
+  blk._curve = MOAIAnimCurve.new()
+  
   --Body
   blk._body = world:addBody( MOAIBox2DBody.DYNAMIC )
   blk._body:setTransform( x, y )
@@ -31,16 +37,12 @@ function Block.create(x, y, blockType)
   
   if blockType == "bomb" then 
     
-    blk._fixture.userdata = {blockType, "safe", bombCount}
+    blk._fixture.userdata = {blockType, "danger", {}, bombCount}
     bombCount = bombCount + 1
     
-  elseif blockType == "m_wall" then
-  
-    blk._fixture.userdata = {"wall", "moveable", 0}
-  
   else
   
-    blk._fixture.userdata = {blockType, "safe", 0}
+    blk._fixture.userdata = {blockType, "safe", {}, 0}
   
   end
   
@@ -54,9 +56,12 @@ function Block.create(x, y, blockType)
     -- Set all boxes around surrounding the bomb to bombable
     if a.userdata[1] == "bomb" then
       
-      if b.userdata[1] ~= nil and b.userdata[1] ~= "wall" and b.userdata[1] ~= "arrow" then
-        b.userdata[3] = a.userdata[3]
+      if b.userdata[1] ~= nil and b.userdata[1] ~= "wall" and b.userdata[1] ~= "arrow" and b.userdata[1] ~= "Bullet" then
+        
+        table.insert(b.userdata[3], a.userdata[4])
+        
         b.userdata[2] = "danger"
+      
       end
       
     end
@@ -66,42 +71,73 @@ function Block.create(x, y, blockType)
       --------------------------
       -- General
       --------------------------
-      if b.userdata == "Bullet" and b ~= nil then
-        
+      if b.userdata[1] == "Bullet" and b ~= nil then
         
         ----------------------------------------------------
         -- Ignore destruction at certain blocks
         ----------------------------------------------------
         if a.userdata[1] ~= "wall" and a.userdata[1] ~= "metal" and a.userdata[1] ~= "bomb" and a.userdata[1] ~= "arrow" then
           
-          blk:destruction()
+          if a.userdata[1] == "fire" then 
+            
+            button["firePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFireButton"))
+            button["firePowerupButton"]:setmissileActivation(true)
+          
+          end
+        
+          if a.userdata[1] == "freeze" then 
+            
+            button["freezePowerupButton"]:changeTexture(resourceManager:getTexture("inactiveFreezeButton"))
+            button["freezePowerupButton"]:setmissileActivation(true)
+          
+          end
+          
+          if a.userdata[1] == "wood" then
+            
+            blk:woodDestroy(a:getBody():getPosition())
+          
+          else
+            
+            blk:destruction()
+          
+          end
+ 
+        end
+        
+        --------------------------
+        -- Powerup effects
+        --------------------------
+        if b.userdata[2] == "freeze" then
+          
+          if a.userdata[1] == "bomb" then
+            
+            blk:freeze(a:getBody():getPosition())
+            
+          end
+        
+        elseif b.userdata[2] == "fire" then
+          
+          if a.userdata[1] == "metal" then
+            
+            blk:melt(a:getBody():getPosition())
+            
+          end
           
         end
         
         --------------------------
-        -- Bomb Mechanics
+        -- Bomb mecahnics
         --------------------------
-        if a.userdata[1] == "bomb" then
+        if a.userdata[1] == "bomb" and b.userdata[2] ~= "freeze" then
           
           blk:explosion(a:getBody():getPosition())
-          blk:destruction()
-          
-           for key,value in pairs(blocks) do
-    
-            if blocks[key]:getUserdata(2) == "danger" and blocks[key]:getUserdata(3) == a.userdata[3] then
-              
-              blocks[key]:destruction()
-            
-            end
-             
-          end
           
         end
         
         --------------------------
         -- Bullet rotation
         --------------------------
-        if b.userdata == "Bullet" and b ~= nil then
+        if b.userdata[1] == "Bullet" and b ~= nil then
         
           if a.userdata[1] == "arrow" then
             
@@ -166,9 +202,9 @@ function Block.create(x, y, blockType)
         end
        
       end
-      
+    
     end
-
+  
   end
   
   blk._fixture:setCollisionHandler(handleCollision, MOAIBox2DArbiter.BEGIN + MOAIBox2DArbiter.END)
@@ -198,10 +234,12 @@ end
 
 function Block:destruction()
   
-  if self._body ~= nil then
+  if self:getUserdata(1) ~= "bomb" and self._destruction == false then
+    
     self._destruction = true
     layer:removeProp(self._prop)
     self._body:destroy()
+  
   end
   
 end
@@ -213,41 +251,119 @@ function Block:moveBlock(direction)
     
 end
 
-function Block:explosion(x,y)
-    
-  local explodeProp = MOAIProp2D.new()  
-    
-  local tiles = 9
-  local speed = 0.05
+function Block:freeze(x,y)
   
-  explodeProp:setDeck(ResourceManager:getTexture("explosion"))
-  explodeProp:setLoc(x,y)
+  self:animate(7, 0.05,"freezeBomb", x, y)
   
-  layer:insertProp(explodeProp)
+end
 
-  curve = MOAIAnimCurve.new()
-  curve:reserveKeys(tiles)
+function Block:melt(x,y)
+  
+  self._destruction = true
+  layer:removeProp(self._prop)
+  self._body:destroy()
+  
+  self:animate(7, 0.05,"meltMetal", x, y)
+  
+end
+
+function Block:woodDestroy(x,y)
+  
+  self._destruction = true
+  layer:removeProp(self._prop)
+  self._body:destroy()
+  
+  self:animate(7, 0.02,"destroyWood", x, y)
+  
+end
+
+function Block:explosion(x,y)
+  
+  self._destruction = true
+  layer:removeProp(self._prop)
+  self._body:destroy()
+  
+ for key,value in pairs(blocks) do
+
+    if blocks[key]:getUserdata(2) == "danger" then
+      
+      for key2,value2 in pairs(blocks[key]:getUserdata(3)) do
+        
+        if value2 == self:getUserdata(4) then
+          
+          if blocks[key]:getUserdata(1) == "bomb" then
+        
+            if blocks[key]:getDestructionState() == false then
+                            
+              blocks[key]:explosion(blocks[key]:getBlockBody():getPosition())
+              
+            end
+            
+          else
+          
+           blocks[key]:destruction()
+          
+          end
+            
+        end
+        
+      end
+      
+    end
+     
+  end
+  
+  self:animate(9, 0.05,"explosion", x, y)
+    
+end
+
+function Block:animate(tl, sp, dck, x, y)
+  
+  local tiles = tl
+  local speed = sp
+  
+  self._animProp:setDeck(ResourceManager:getTexture(dck))
+  self._animProp:setLoc(x,y)
+  
+  layer:insertProp(self._animProp)
+
+  self._curve:reserveKeys(tiles)
 
   for i=1,tiles,1 do
     
-    curve:setKey(i, speed * i, i)
+    self._curve:setKey(i, speed * i, i)
     
   end
 
-  anim = MOAIAnim:new()
-  anim:reserveLinks(1)
-  anim:setLink(1, curve, explodeProp, MOAIProp2D.ATTR_INDEX)
-  anim:setMode(MOAITimer.LOOP)
-  anim:setSpan(tiles * speed)
-  anim:start()
+  self._animation:reserveLinks(1)
+  self._animation:setLink(1, self._curve, self._animProp, MOAIProp2D.ATTR_INDEX)
+  self._animation:setMode(MOAITimer.LOOP)
+  self._animation:setSpan(tiles * speed)
+  self._animation:start()
   
-  anim:setListener(MOAIAnim.EVENT_TIMER_END_SPAN, 
+  self._animation:setListener(MOAIAnim.EVENT_TIMER_END_SPAN, 
   function()
-    anim:stop()
-    layer:removeProp(explodeProp)
-  end
-)
+    self._animation:stop()
+    layer:removeProp(self._animProp)
     
+    if dck == "freezeBomb" then
+      
+      
+      self._fixture.userdata[1] = "frozenBomb"
+      self:changeTexture()
+      
+    end
+    
+  end)
+  
+end
+
+-- Set Texture
+function Block:changeTexture(texture)
+  
+  layer:removeProp(self._prop)
+  self:make()
+  
 end
 
 function Block:getBlockBody() return self._body end
