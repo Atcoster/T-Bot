@@ -47,6 +47,12 @@ function View:make()
   
 end
 
+function View:getProp()
+  
+  return self._prop
+  
+end
+
 --Slide animation
 function View:slide()
     

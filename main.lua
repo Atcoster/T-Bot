@@ -107,14 +107,17 @@ props = {}
 require("Helpers/resourceManager")
 resourceManager = ResourceManager.create()
 
+require("Helpers/progressbar")
+progressBar = Progressbar.create()
+
 -- Helpers
 require("Helpers/view")
-require("Helpers/block")
 require("Helpers/button")
 require("Helpers/view")
 require("Helpers/textfield")
 
 -- Mechanics
+require("Mechanics/block")
 require("Mechanics/blockinator")
 require("Mechanics/player")
 require("Mechanics/bullet")

@@ -96,6 +96,12 @@ function Block.create(x, y, blockType)
             
             blk:woodDestroy(a:getBody():getPosition())
           
+          elseif a.userdata[1] == "part" then
+            
+            progressBar:moveProgressbarImage()
+            
+            blk:destruction()
+            
           else
             
             blk:destruction()
@@ -220,7 +226,17 @@ end
 ----------------------------
 function Block:make()
   
-  self._image:setTexture(resourceManager:getTexture(self._fixture.userdata[1]))
+  if self._fixture.userdata[1] == "part" then
+    
+    local part = self._fixture.userdata[1]..tostring(math.random(1, 10))
+    
+    self._image:setTexture(resourceManager:getTexture(part))
+  
+  else
+  
+    self._image:setTexture(resourceManager:getTexture(self._fixture.userdata[1]))
+  
+  end
   
   self._image:setRect(-24, -24, 24, 24)
 

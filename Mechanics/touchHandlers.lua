@@ -36,7 +36,30 @@ if MOAIInputMgr.device.pointer then
          
          if gameState == "LevelSelection" then
           
-          if(touchedProp == text["levelOne"]:getTextProp()) then gameView:loadLevel() print("level selected") end
+          if(touchedProp == text["levelOne"]:getTextProp()) then gameView:levelSelectionPopup("1-1") end
+          --if(touchedProp == text["levelTwo"]:getTextProp()) then gameView:levelSelectionPopup("1-2") end
+          --if(touchedProp == text["levelThree"]:getTextProp()) then gameView:levelSelectionPopup("1-3") end
+          --if(touchedProp == text["levelFour"]:getTextProp()) then gameView:levelSelectionPopup("1-4") end
+          --if(touchedProp == text["levelFive"]:getTextProp()) then gameView:levelSelectionPopup("1-5") end
+          
+          if(touchedProp == button["popupLevelPlay"]:getProp()) then gameView:loadLevel() end
+          
+          if(touchedProp == button["popupLevelSelect"]:getProp()) then
+            
+            layer:removeProp(button["popupBackground"]:getProp())
+            layer:removeProp(button["popupLevelSelect"]:getProp())
+            layer:removeProp(button["popupLevelPlay"]:getProp())
+            
+            layer:removeProp(button["goldPrize"]:getProp())
+            layer:removeProp(button["silverPrize"]:getProp())
+            layer:removeProp(button["bronzePrize"]:getProp())
+            
+            layer:removeProp(text["currentLevel"]:getTextProp())
+            layer:removeProp(text["levelTimeTitle"]:getTextProp())
+            layer:removeProp(text["levelTime"]:getTextProp())
+       
+          end
+          
           if(touchedProp == button["levelBackButton"]:getProp()) then gameView:loadMainMenu() end
         
          end

@@ -104,6 +104,31 @@ function ViewControl:loadLevelSelectMenu()
 end
 
 ----------------------------
+-- Level Selection pop up
+----------------------------
+function ViewControl:levelSelectionPopup(level)
+  
+  --Background
+  button["popupBackground"] = Button.create(0, 0, resourceManager:getTexture("popupBackground"))
+  
+  --Buttons
+  button["popupLevelSelect"] = Button.create(-76, -250, resourceManager:getTexture("poplevelSelectButton"))
+  button["popupLevelPlay"] = Button.create(76, -250, resourceManager:getTexture("popPlayButton"))
+  
+  -- Text
+  text["currentLevel"] = TextField.create(-35, 230, 350, 75, level, 55)
+  
+  text["levelTimeTitle"] = TextField.create(-110, -60, 350, 75, "Best Score", 45)
+  text["levelTime"] = TextField.create(-90, -140, 250, 80, "000000", 55)
+  
+  --Prizes
+  button["goldPrize"] = Button.create(4, 158, resourceManager:getTexture("emptyPrizeBig"))
+  button["silverPrize"] = Button.create(140, 110, resourceManager:getTexture("emptyPrizeSmall"))
+  button["bronzePrize"] = Button.create(-140, 110, resourceManager:getTexture("emptyPrizeSmall"))
+  
+  
+end
+----------------------------
 -- Load level
 ----------------------------
 function ViewControl:loadLevel()
@@ -112,7 +137,7 @@ function ViewControl:loadLevel()
   gameState = "Playfield"
   
   view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
-
+  
   button["firePowerupButton"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
   button["freezePowerupButton"] = Button.create(0, -440, resourceManager:getTexture("inactivePowerup"))
 
@@ -120,6 +145,11 @@ function ViewControl:loadLevel()
   blockGenerator = Blockinator.create()
 
   blockGenerator:make()
+  
+  progressBar:drawProgressBarImage(5)
+  
+  button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
+ 
   
   ----------------------------------
   -- Game loop
@@ -202,9 +232,9 @@ function ViewControl:loadLevel()
       
     end
   
-  end
-  
-  ------------------------------
+end
+
+ ------------------------------
  -- Invisable walls
  ------------------------------
   --Floor
