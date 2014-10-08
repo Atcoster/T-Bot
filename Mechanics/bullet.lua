@@ -12,7 +12,7 @@ function Bullet.create(x,y)
   local blt = {}
   setmetatable(blt, Bullet)
   
-  blt._speed = 5
+  blt._speed = 4
   blt._destruction = false
   blt._direction = "up"
   
@@ -24,8 +24,11 @@ function Bullet.create(x,y)
   blt._fixture = blt._body:addRect(-12,-12,12,12)
   blt._fixture.userdata = {"Bullet", "normal"}
   
+ 
+  
    -- Texture
-  blt._image = MOAIGfxQuad2D.new()
+  blt._animation = MOAIAnim:new()
+  blt._curve = MOAIAnimCurve.new()
   blt._prop = MOAIProp2D.new()
   
   blt:make()
@@ -39,30 +42,43 @@ end
 ----------------------------
 function Bullet:make()
   
-  if  player:getWeaponType() == "normal" then
+   if  player:getWeaponType() == "normal" then
     
-    self._image:setTexture(resourceManager:getTexture("missile"))
+    self._prop:setDeck(resourceManager:getTexture("normalMissileSheet"))
     self._fixture.userdata[2] = "normal"
     
   elseif player:getWeaponType() == "fire" then
     
-    self._image:setTexture(resourceManager:getTexture("fireMissile"))
+    self._prop:setDeck(resourceManager:getTexture("fireMissileSheet"))
     self._fixture.userdata[2] = "fire"
     
   elseif player:getWeaponType() == "freeze" then
     
-    self._image:setTexture(resourceManager:getTexture("freezeMissile"))
+    self._prop:setDeck(resourceManager:getTexture("freezeMissileSheet"))
     self._fixture.userdata[2] = "freeze"
     
   end
   
-  self._image:setRect(-24, -24, 24, 24)
-
-  self._prop:setDeck(self._image)
-  
   self._prop:setParent(self._body)
   
   layer:insertProp(self._prop)
+  
+  local tiles = 3
+  local speed = 0.1
+
+  self._curve:reserveKeys(tiles)
+
+  for i=1,tiles,1 do
+    
+    self._curve:setKey(i, speed * i, i)
+    
+  end
+
+  self._animation:reserveLinks(1)
+  self._animation:setLink(1, self._curve, self._prop, MOAIProp2D.ATTR_INDEX)
+  self._animation:setMode(MOAITimer.LOOP)
+  self._animation:setSpan(tiles * speed)
+  self._animation:start()
   
 end
 

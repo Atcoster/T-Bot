@@ -25,11 +25,11 @@ end
 ----------------------------
 function clearView()
   
+  
   -- Clear all blocks
   for key, value in pairs(blocks) do
-    if blocks[key] ~= nil then
-      blocks[key]:destroy();
-      blocks[key] = nil;
+    if blocks[key]:getBlockBody() ~= nil then
+      blocks[key]:getBlockBody():destroy()
     end
   end
   
@@ -40,11 +40,12 @@ function clearView()
   button = {}
   text = {}
   view = {}
-  player = {}
+  --player = {}
   bullet = {}
 
   blocks = {}
   blockGenerator = {}
+  
   
 end
 
@@ -108,6 +109,8 @@ end
 ----------------------------
 function ViewControl:levelSelectionPopup(level)
   
+  gameState = "LevelSelectionPopup"
+  
   --Background
   button["popupBackground"] = Button.create(0, 0, resourceManager:getTexture("popupBackground"))
   
@@ -128,18 +131,46 @@ function ViewControl:levelSelectionPopup(level)
   
   
 end
+
+----------------------------
+-- In game pop up
+----------------------------
+function ViewControl:gamePopup()
+  
+  --Background
+  button["popupBackground"] = Button.create(0, 0, resourceManager:getTexture("pausePopupBackground"))
+  
+  --Buttons
+  button["popupGameStop"] = Button.create(-176, -50, resourceManager:getTexture("poplevelSelectButton"))
+  button["popupGameRestart"] = Button.create(0, -50, resourceManager:getTexture("popReplayButton"))
+  button["popupGamePlay"] = Button.create(176, -50, resourceManager:getTexture("popPlayButton"))
+  
+  -- Text  
+  text["gamePauseTitle"] = TextField.create(-160, 60, 350, 75, "GAME PAUSED", 45)
+  
+  -- Freeze game
+  gameTime:stop()
+  player:setMovement(false)
+  gameState = "paused"
+  
+  
+end
+
 ----------------------------
 -- Load level
 ----------------------------
 function ViewControl:loadLevel()
   
   clearView()
+  
   gameState = "Playfield"
   
-  view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
+  --view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
   
   button["firePowerupButton"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
   button["freezePowerupButton"] = Button.create(0, -440, resourceManager:getTexture("inactivePowerup"))
+  
+  button["pauseButton"] = Button.create(250, -440, resourceManager:getTexture("pauseButton"))
 
   player = Player.create()
   blockGenerator = Blockinator.create()
@@ -149,7 +180,39 @@ function ViewControl:loadLevel()
   progressBar:drawProgressBarImage(5)
   
   button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
- 
+  
+  text["gameTime"] = TextField.create(20, 400, 150, 75, "5:00", 35)
+  text["gameCurrentLevel"] = TextField.create(120, 400, 150, 75, "Level 1-1", 35)
+  
+  -----------
+  -- Timer --
+  -----------
+  seconds = 60
+  minutes = 4
+  function updateTime()
+    
+    --count down
+    seconds = seconds - 1
+    
+    if seconds < 10 and seconds >= 0 then
+      
+      seconds = "0"..seconds
+    
+    elseif seconds < 0 then
+    
+      seconds = 59
+      minutes = minutes - 1
+    
+    end
+    
+    text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
+    
+  end
+  
+  gameTime:setSpan(1)
+  gameTime:setMode(MOAITimer.LOOP)
+  gameTime:setListener(MOAITimer.EVENT_TIMER_LOOP, updateTime )
+  gameTime:start()
   
   ----------------------------------
   -- Game loop
@@ -199,41 +262,43 @@ function ViewControl:loadLevel()
     ---------------
     -- Player
     ---------------
+    if player:getMovement() == true then 
       
-    local playerX, playerY = player:getPlayerBody():getPosition()
-    
-    if playerX < mouseStartX then
+      local playerX, playerY = player:getPlayerBody():getPosition()
       
-      if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+      if playerX < mouseStartX then
         
-        player:move(0)
+        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+          
+          player:move(0)
+          
+          
+        else
         
+          player:move(8)
         
-      else
-      
-        player:move(8)
-      
+        end
+        
       end
       
-    end
-    
-    if playerX > mouseStartX then
-      
-      if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+      if playerX > mouseStartX then
         
-        player:move(0)
+        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+          
+          player:move(0)
+          
+        else
         
+          player:move(-8)
         
-      else
-      
-        player:move(-8)
-      
+        end
+        
       end
-      
+    
     end
-  
-end
 
+  end
+  
  ------------------------------
  -- Invisable walls
  ------------------------------

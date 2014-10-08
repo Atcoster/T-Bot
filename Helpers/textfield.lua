@@ -50,6 +50,12 @@ function TextField:make()
   
 end
 
+function TextField:setText(string)
+  
+  self._prop:setString(string)
+  
+end
+
 function newStyle(font, size)
  
  local charcodes = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 .,:;!?()&/-'

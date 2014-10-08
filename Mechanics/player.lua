@@ -12,7 +12,7 @@ function Player.create()
   local pl = {}
   setmetatable(pl, Player)
   
-  pl._movement = false
+  pl._movement = true
   pl._direction = 0
   pl._starty = -350
   
@@ -23,7 +23,6 @@ function Player.create()
   pl._fixture = pl._body:addRect(-48, -42, 48, 42)
   
   -- Texture
-  pl._spritesheet = MOAITileDeck2D.new()
   pl._prop = MOAIProp2D.new()  
   
   pl:make()
@@ -37,11 +36,7 @@ end
 ----------------------------
 function Player:make()
   
-  self._spritesheet:setTexture("Assets/img/t-bot/Tbot_Sprite.png")
-  self._spritesheet:setSize(4,1)
-  self._spritesheet:setRect(-48, -42, 48, 42)
-  
-  self._prop:setDeck(self._spritesheet)
+  self._prop:setDeck(resourceManager:getTexture("tbot"))
   self._prop:setParent(self._body)
   
   layer:insertProp(self._prop)

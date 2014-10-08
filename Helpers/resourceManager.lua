@@ -44,6 +44,9 @@ function ResourceManager:loadResources()
   images["popupBackground"] = MOAITexture.new()
   images["popupBackground"]:load("Assets/img/Views/Popups/popupBG.png")
   
+  images["pausePopupBackground"] = MOAITexture.new()
+  images["pausePopupBackground"]:load("Assets/img/Views/Popups/pauseBG.png")
+  
   
   ------------------------
   -- Box Textures
@@ -95,23 +98,6 @@ function ResourceManager:loadResources()
   images["freeze"]:invalidate()
   
   ------------------------
-  -- Player Textures
-  ------------------------
-  images["player"] = MOAIImageTexture.new()
-  images["player"]:load("Assets/img/t-bot/T-Bot-48.png")
-  images["player"]:invalidate()
-  
-  images["missile"] = MOAIImageTexture.new()
-  images["missile"]:load("Assets/img/t-bot/missile.png")
-  images["missile"]:invalidate()
-  
-  images["fireMissile"] = MOAITexture.new()
-  images["fireMissile"]:load("Assets/img/t-bot/Fire-missile.png")
-  
-  images["freezeMissile"] = MOAITexture.new()
-  images["freezeMissile"]:load("Assets/img/t-bot/Freeze-missile.png")
-  
-  ------------------------
   -- Buttons
   ------------------------
   
@@ -150,7 +136,7 @@ function ResourceManager:loadResources()
   images["popReplayButton"] = MOAITexture.new()
   images["popReplayButton"]:load("Assets/img/Views/Popups/restart.png")
   
-  -- popup prozes
+  -- popup prizes
   images["emptyPrizeBig"] = MOAITexture.new()
   images["emptyPrizeBig"]:load("Assets/img/Views/Popups/empty-big.png")
   
@@ -186,9 +172,32 @@ function ResourceManager:loadResources()
   images["backButton"] = MOAITexture.new()
   images["backButton"]:load("Assets/img/Views/backBtn.png")
   
+  images["pauseButton"] = MOAITexture.new()
+  images["pauseButton"]:load("Assets/img/Views/pauze.png")
+  
   ------------------------
   -- Spritesheets
   ------------------------
+  images["tbot"] = MOAITileDeck2D.new()
+  images["tbot"]:setTexture("Assets/img/t-bot/Tbot_Sprite.png")
+  images["tbot"]:setSize(4,1)
+  images["tbot"]:setRect(-48, -42, 48, 42)
+  
+  images["normalMissileSheet"] = MOAITileDeck2D.new()
+  images["normalMissileSheet"]:setTexture("Assets/img/t-bot/NormalMisSprite.png")
+  images["normalMissileSheet"]:setSize(3,1)
+  images["normalMissileSheet"]:setRect(-24, -24, 24, 24)
+  
+  images["fireMissileSheet"] = MOAITileDeck2D.new()
+  images["fireMissileSheet"]:setTexture("Assets/img/t-bot/FireMisSprite.png")
+  images["fireMissileSheet"]:setSize(3,1)
+  images["fireMissileSheet"]:setRect(-24, -24, 24, 24)
+  
+  images["freezeMissileSheet"] = MOAITileDeck2D.new()
+  images["freezeMissileSheet"]:setTexture("Assets/img/t-bot/FreezeMisSprite.png")
+  images["freezeMissileSheet"]:setSize(3,1)
+  images["freezeMissileSheet"]:setRect(-24, -24, 24, 24)
+  
   images["explosion"] = MOAITileDeck2D.new()
   images["explosion"]:setTexture("Assets/img/Animations/explosion-sprite.png")
   images["explosion"]:setSize(9,1)
