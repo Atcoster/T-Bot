@@ -25,6 +25,8 @@ end
 ----------------------------
 function clearView()
   
+  --Remove all props
+  layer:clear()
   
   -- Clear all blocks
   for key, value in pairs(blocks) do
@@ -33,8 +35,25 @@ function clearView()
     end
   end
   
-  --Remove all props
-  layer:clear()
+  -- Clear all blocks
+  for key, value in pairs(bullet) do
+    if bullet[key]:getBulletBody() ~= nil then
+      bullet[key]:getBulletBody():destroy()
+    end
+  end
+  
+  -- Clear all text
+  for key, value in pairs(text) do
+    if text[key]:getTextProp() ~= nil then
+      layer:removeProp(text[key]:getTextProp())
+    end
+  end
+  
+  
+  -- Remove player if exist
+  if player:getPlayerBody() ~= nil then
+    player:getPlayerBody():destroy()
+  end
   
   -- Reset arrays
   button = {}
@@ -42,7 +61,6 @@ function clearView()
   view = {}
   --player = {}
   bullet = {}
-
   blocks = {}
   blockGenerator = {}
   
@@ -121,8 +139,8 @@ function ViewControl:levelSelectionPopup(level)
   -- Text
   text["currentLevel"] = TextField.create(-35, 230, 350, 75, level, 55)
   
-  text["levelTimeTitle"] = TextField.create(-110, -60, 350, 75, "Best Score", 45)
-  text["levelTime"] = TextField.create(-90, -140, 250, 80, "000000", 55)
+  text["levelTimeTitle"] = TextField.create(-100, -60, 350, 75, "Best Time", 45)
+  text["levelTime"] = TextField.create(-70, -140, 250, 80, tostring(user_data.levelData["level1"]), 55)
   
   --Prizes
   button["goldPrize"] = Button.create(4, 158, resourceManager:getTexture("emptyPrizeBig"))
@@ -157,6 +175,63 @@ function ViewControl:gamePopup()
 end
 
 ----------------------------
+-- In game pop up WIN
+----------------------------
+function ViewControl:gamePopupWin()
+  
+  --Background
+  button["popupBackground"] = Button.create(0, 0, resourceManager:getTexture("popupBackground"))
+  
+  --Buttons
+  button["popupLevelSelect"] = Button.create(-176, -250, resourceManager:getTexture("poplevelSelectButton"))
+  button["popupGameRestart"] = Button.create(0, -250, resourceManager:getTexture("popReplayButton"))
+  button["popupLevelPlay"] = Button.create(176, -250, resourceManager:getTexture("popPlayButton"))
+  
+  
+  -- Score compare
+  local winCondition = {}
+  for k, v in string.gmatch(winTime, "(%w+):(%w+)") do
+    winCondition["minute"] = k
+    winCondition["second"] = v
+  end
+   
+  local highscore = {}
+  for k, v in string.gmatch(user_data.levelData["level1"], "(%w+):(%w+)") do
+    highscore["minute"] = k
+    highscore["second"] = v
+  end
+  
+  local totalCondition = (winCondition["minute"] * 100) + winCondition["second"]
+  local totalHighscore = (highscore["minute"] * 100) + highscore["second"]
+  
+  print(totalCondition.." < "..totalHighscore)
+  
+  if totalCondition < totalHighscore then
+    
+    user_data.levelData["level1"] = winTime
+    save_user_data()
+    
+  end
+  
+  text["levelTime"] = TextField.create(-86, -120, 250, 80, "Time: "..tostring(winTime), 35)
+  text["levelBestTime"] = TextField.create(-160, -180, 350, 80, "Best time: "..tostring(user_data.levelData["level1"]), 35)
+  
+  --Prizes
+  text["levelWinTitle"] = TextField.create(-165, 210, 450, 75, "LEVEL COMPLETED!", 35)
+  button["goldPrize"] = Button.create(4, 118, resourceManager:getTexture("emptyPrizeBig"))
+  button["silverPrize"] = Button.create(140, 70, resourceManager:getTexture("emptyPrizeSmall"))
+  button["bronzePrize"] = Button.create(-140, 70, resourceManager:getTexture("emptyPrizeSmall"))
+  
+  -- Freeze game
+  gameTime:stop()
+  player:setMovement(false)
+  gameState = "gameWon"
+  
+  
+end
+
+
+----------------------------
 -- Load level
 ----------------------------
 function ViewControl:loadLevel()
@@ -165,19 +240,20 @@ function ViewControl:loadLevel()
   
   gameState = "Playfield"
   
-  --view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
+  view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
   
   button["firePowerupButton"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
   button["freezePowerupButton"] = Button.create(0, -440, resourceManager:getTexture("inactivePowerup"))
   
   button["pauseButton"] = Button.create(250, -440, resourceManager:getTexture("pauseButton"))
-
+  
   player = Player.create()
+  player:make()
   blockGenerator = Blockinator.create()
 
   blockGenerator:make()
   
-  progressBar:drawProgressBarImage(5)
+  progressBar:drawProgressBarImage(1)
   
   button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
   
@@ -189,6 +265,10 @@ function ViewControl:loadLevel()
   -----------
   seconds = 60
   minutes = 4
+  
+  winSecs = 0
+  winMin =  0
+  
   function updateTime()
     
     --count down
@@ -205,6 +285,21 @@ function ViewControl:loadLevel()
     
     end
     
+    winSecs = winSecs + 1
+    
+    if winSecs < 10 then
+      
+      winSecs = "0"..winSecs
+      
+    elseif winSecs == 60 then
+    
+      winSecs = "00"
+      winMin =  winMin + 1
+    
+    end
+    
+    winTime = "0"..tostring(winMin)..":"..tostring(winSecs)
+    
     text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
     
   end
@@ -214,94 +309,9 @@ function ViewControl:loadLevel()
   gameTime:setListener(MOAITimer.EVENT_TIMER_LOOP, updateTime )
   gameTime:start()
   
-  ----------------------------------
-  -- Game loop
-  ----------------------------------
-
-  thread = MOAIThread.new()
-  thread:run(function() 
-      
-      while true do
-      
-        update()
-        -- Start next thread
-        coroutine.yield()
-      
-      end
-      
-  end)
-
-  function update() 
-    
-    ---------------
-    -- Bullets
-    ---------------
-    for key,value in pairs(bullet) do
-      
-      if bullet[key]:getDestructionState() == false then
-       
-        bullet[key]:move()
-      
-      end
-    
-    end
-    
-    ---------------
-    -- Blocks
-    ---------------
-    for key,value in pairs(blocks) do
-      
-      if blocks[key]:getDestructionState() == false then
-        
-        blocks[key]:getBlockBody():setAwake(false)
-        
-      end
-      
-    end
-    
-    ---------------
-    -- Player
-    ---------------
-    if player:getMovement() == true then 
-      
-      local playerX, playerY = player:getPlayerBody():getPosition()
-      
-      if playerX < mouseStartX then
-        
-        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
-          
-          player:move(0)
-          
-          
-        else
-        
-          player:move(8)
-        
-        end
-        
-      end
-      
-      if playerX > mouseStartX then
-        
-        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
-          
-          player:move(0)
-          
-        else
-        
-          player:move(-8)
-        
-        end
-        
-      end
-    
-    end
-
-  end
-  
- ------------------------------
- -- Invisable walls
- ------------------------------
+  ------------------------------
+  -- Invisable walls
+  ------------------------------
   --Floor
   bodies[0] = world:addBody( MOAIBox2DBody.STATIC )
   bodies[0]:setTransform( 0, -400 )  

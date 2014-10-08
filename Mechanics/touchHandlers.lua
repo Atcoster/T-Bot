@@ -137,7 +137,6 @@ function downAction(x,y,touchedProp)
   
     if touchedProp == button["popupGameRestart"]:getProp() then
       
-      player:setMovement(true)
       gameView:loadLevel()
       
     end
@@ -151,22 +150,50 @@ function downAction(x,y,touchedProp)
     
   end
   
+  --------------------
+  ---- Win mode 
+  --------------------
+  if gameState == "gameWon" then 
+    
+    if(touchedProp == button["popupLevelPlay"]:getProp()) then gameView:loadLevel() end
+    
+    if touchedProp == button["popupGameRestart"]:getProp() then
+      
+      gameView:loadLevel()
+      
+    end
+    
+    if(touchedProp == button["popupLevelSelect"]:getProp()) then
+      
+      gameView:loadLevelSelectMenu()
+ 
+    end
+    
+  end
   
   --------------------
   ---- Game mode 
   --------------------
   if gameState == "Playfield" then        
     
-    if y < -300 and y > -400 and player:getMovement() == true then
-         
-       mouseStartX = x
-       
-    end
-    
     if touchedProp == button["pauseButton"]:getProp() then
       
       gameView:gamePopup()
       
+    end
+    
+    if touchedProp == player:getPlayerProp() and player:getMovement() == true then
+    
+      table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
+
+    else
+    
+      if y < -300 and y > -400 and player:getMovement() == true then
+           
+         mouseStartX = x
+         
+      end
+    
     end
     
     --------------------
@@ -271,12 +298,6 @@ function releaseAction(x,y,touchedProp)
   ---- Player 
   --------------------
   if gameState == "Playfield" then
- 
-    if touchedProp == player:getPlayerProp() and player:getMovement() == true then
-    
-      table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
-
-    end
     
     -------------------
     ---- Swipe 

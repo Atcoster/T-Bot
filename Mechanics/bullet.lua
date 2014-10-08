@@ -12,7 +12,7 @@ function Bullet.create(x,y)
   local blt = {}
   setmetatable(blt, Bullet)
   
-  blt._speed = 4
+  blt._speed = 5
   blt._destruction = false
   blt._direction = "up"
   

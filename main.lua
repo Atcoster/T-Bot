@@ -5,10 +5,11 @@ local gameName = "T-Bot"
 local screenWidth = 320
 local screenHeight = 480
 
+----------------------------
 -- Device Screen setup
+----------------------------
 deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
 deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
-
 
 -- Open a window for testing, used on pc, skipped when on mobile
 MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
@@ -18,20 +19,24 @@ viewport = MOAIViewport.new()
 viewport:setSize(deviceScreenWidth, deviceScreenHeight)
 viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
 
+----------------------------
 -- Adding layers
+----------------------------
 layer = MOAILayer2D.new()
 layer:setViewport(viewport)
 MOAIRenderMgr.pushRenderPass(layer)
 MOAIGfxDevice.getFrameBuffer():setClearColor(0, 0, 0, 1);
 
+----------------------------
 -- Creating the world
+----------------------------
 gravityX = 0;
 gravityY = -5; 
 world = MOAIBox2DWorld.new();
 world:setGravity(gravityX, gravityY);
 world:setUnitsToMeters(1/30);
 world:start();
-layer:setBox2DWorld(world);
+--layer:setBox2DWorld(world);
 
 -- Create partition
 partition = MOAIPartition.new()
@@ -43,12 +48,9 @@ layer:setPartition(partition)
 button = {}
 text = {}
 view = {}
-player = {}
 bullet = {}
-
 blocks = {}
 blockGenerator = {}
-
 resourceManager = {}
 
 mouseStartX = 0
@@ -57,6 +59,7 @@ gameView = {}
 gameState = {}
 gameTime = MOAITimer.new()
 
+winTime = "00:00"
 
 -- Invisable walls
 bodies = {}
@@ -70,8 +73,12 @@ resourceManager = ResourceManager.create()
 require("Helpers/progressbar")
 progressBar = Progressbar.create()
 
+require("Mechanics/player")
+player = Player.create()
+
 -- Helpers
 require("Helpers/view")
+require("Helpers/dataPersistence")
 require("Helpers/button")
 require("Helpers/view")
 require("Helpers/textfield")
@@ -79,7 +86,6 @@ require("Helpers/textfield")
 -- Mechanics
 require("Mechanics/block")
 require("Mechanics/blockinator")
-require("Mechanics/player")
 require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
 require("Mechanics/viewControl")

@@ -19,13 +19,13 @@ function Player.create()
   pl._weapon = "normal"
   
   pl._body = world:addBody(MOAIBox2DBody.DYNAMIC)
-  pl._body:setTransform(0, pl._starty)
-  pl._fixture = pl._body:addRect(-48, -42, 48, 42)
+  pl._fixture = {}
+  
   
   -- Texture
   pl._prop = MOAIProp2D.new()  
   
-  pl:make()
+  --pl:make()
   
   return pl
   
@@ -35,6 +35,11 @@ end
 -- Functions
 ----------------------------
 function Player:make()
+  
+  self._body:setTransform(0, self._starty)
+  self._body:addRect(-48, -42, 48, 42)
+  
+  self._fixture = self._body:addRect(-48, -42, 48, 42)
   
   self._prop:setDeck(resourceManager:getTexture("tbot"))
   self._prop:setParent(self._body)

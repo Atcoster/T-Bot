@@ -99,8 +99,13 @@ function Block.create(x, y, blockType)
           elseif a.userdata[1] == "part" then
             
             progressBar:moveProgressbarImage()
-            
             blk:destruction()
+            
+            if progressBar:getRemainingParts() == 0 then
+            
+              gameView:gamePopupWin()
+            
+            end
             
           else
             

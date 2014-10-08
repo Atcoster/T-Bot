@@ -20,12 +20,12 @@ function Progressbar.create()
   pb._startWidth = nil
   
   pb._partAmountMath = 0
+  pb._partAmount = 0
   
   pb._width = 0
   pb._height = 0
   pb._x = 0
   pb._y = 0
-  
   
   return pb
   
@@ -65,6 +65,7 @@ end
 function Progressbar:drawProgressBarImage(amountParts)
   
   self._partAmountMath = 290 / amountParts
+  self._partAmount = amountParts
   
   --Sprite
   self._sprite:setTexture(resourceManager:getTexture("gameTopMenuBar"))
@@ -76,13 +77,14 @@ function Progressbar:drawProgressBarImage(amountParts)
 
   --Insert prop
   layer:insertProp(self._prop)
-  partition:insertProp(self._prop)
   
 end
 
 function Progressbar:moveProgressbarImage()
   
   self._prop:moveLoc(self._partAmountMath,0,1)
+  
+  self._partAmount = self._partAmount - 1
   
 end
 
@@ -93,5 +95,11 @@ function Progressbar:addProgress(amount)
   layer:removeProp( self._prop )
   
   self:drawProgressBar(self._x, self._y, self._progressWidth, self._height)
+  
+end
+
+function Progressbar:getRemainingParts()
+  
+  return self._partAmount
   
 end
