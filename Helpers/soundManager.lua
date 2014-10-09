@@ -31,7 +31,6 @@ function SoundManager:loadResources()
   sounds["mainTheme"] = MOAIUntzSound.new()
   sounds["mainTheme"]:load("Assets/sounds/music/Theme.wav")
   sounds["mainTheme"]:setLooping(true)
-  sounds["mainTheme"]:play()
   
   sounds["gameTheme"] = MOAIUntzSound.new()
   sounds["gameTheme"]:load("Assets/sounds/music/InGameMusic.wav")
