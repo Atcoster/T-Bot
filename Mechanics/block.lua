@@ -325,11 +325,19 @@ function Block:explosion(x,y)
             end
             
           else
-          
+           
            if blocks[key]:getUserdata(1) == "part" and blocks[key]:getDestructionState() == false  then
             
-              gameView:gamePopupLose()
+            gameView:gamePopupLose()
             
+           elseif blocks[key]:getUserdata(1) == "fire" and blocks[key]:getDestructionState() == false then
+             
+            gameView:gamePopupLose()
+             
+           elseif blocks[key]:getUserdata(1) == "freeze" and blocks[key]:getDestructionState() == false then
+           
+            gameView:gamePopupLose()
+           
            else
              
              blocks[key]:destruction()
