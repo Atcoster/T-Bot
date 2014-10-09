@@ -38,12 +38,13 @@ else
         
         x,y = layer:wndToWorld(x, y)
         
+        --[[
         if y < -300 and y > -400 and player:getMovement() == true then
            
            mouseStartX = x
            
         end
-
+        --]]
         
         if (tapCount > 1) then
         
@@ -80,11 +81,31 @@ function downAction(x,y,touchedProp)
    
   if gameState == "LevelSelection" then
     
-    if(touchedProp == text["levelOne"]:getTextProp()) then gameView:levelSelectionPopup("1-1") end
-    --if(touchedProp == text["levelTwo"]:getTextProp()) then gameView:levelSelectionPopup("1-2") end
-    --if(touchedProp == text["levelThree"]:getTextProp()) then gameView:levelSelectionPopup("1-3") end
-    --if(touchedProp == text["levelFour"]:getTextProp()) then gameView:levelSelectionPopup("1-4") end
-    --if(touchedProp == text["levelFive"]:getTextProp()) then gameView:levelSelectionPopup("1-5") end
+    if(touchedProp == text["levelOne"]:getTextProp()) then currentLevel="level1" gameView:levelSelectionPopup("1-1")  end
+    
+    if user_data.levelData["level1"]["status"] == "complete" then 
+      
+      if(touchedProp == text["levelTwo"]:getTextProp()) then currentLevel="level2" gameView:levelSelectionPopup("1-2")   end
+    
+    end
+  
+    if user_data.levelData["level2"]["status"] == "complete" then
+    
+      if(touchedProp == text["levelThree"]:getTextProp()) then currentLevel="level3" gameView:levelSelectionPopup("1-3")  end
+    
+    end
+  
+    if user_data.levelData["level3"]["status"] == "complete" then
+    
+      if(touchedProp == text["levelFour"]:getTextProp()) then currentLevel="level4" gameView:levelSelectionPopup("1-4")  end
+      
+    end
+    
+    if user_data.levelData["level4"]["status"] == "complete" then
+      
+      if(touchedProp == text["levelFive"]:getTextProp()) then currentLevel="level5" gameView:levelSelectionPopup("1-5")  end
+      
+    end
     
     if(touchedProp == button["levelBackButton"]:getProp()) then gameView:loadMainMenu() end
   
@@ -288,7 +309,7 @@ function downAction(x,y,touchedProp)
         if blocks[key]:getUserdata(1) == "arrow" then
             
             blocks[key]:getBlockProp():moveRot(-90, 0.5)
-            
+            soundManager:playMusic("arrowSwitch")
         end
         
         -- Swiping - Under construction

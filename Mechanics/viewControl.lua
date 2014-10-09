@@ -109,18 +109,39 @@ function ViewControl:loadLevelSelectMenu()
   
   --Levels
   button["levelOne"] = Button.create(0, -280, resourceManager:getTexture("levelActiveButton"))
-  text["levelOne"] = TextField.create(-16, -322, 50, 75, "1", 55)
-  
   button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelInactiveButton"))
-  text["levelTwo"] = TextField.create(-176, -130, 50, 75, "2", 55)
-  
   button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelInactiveButton"))
-  text["levelThree"] = TextField.create(150, -132, 50, 75, "3", 55)
-  
   button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelInactiveButton"))
-  text["levelFour"] = TextField.create(150, 58, 50, 75, "4", 55)
-  
   button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelInactiveButton"))
+  
+  if user_data.levelData["level1"]["status"] == "complete" then 
+    
+    button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  if user_data.levelData["level2"]["status"] == "complete" then 
+    
+    button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  if user_data.levelData["level3"]["status"] == "complete" then 
+  
+    button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  if user_data.levelData["level4"]["status"] == "complete" then   
+  
+    button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  text["levelOne"] = TextField.create(-16, -322, 50, 75, "1", 55)
+  text["levelTwo"] = TextField.create(-176, -130, 50, 75, "2", 55)
+  text["levelThree"] = TextField.create(150, -132, 50, 75, "3", 55)
+  text["levelFour"] = TextField.create(150, 58, 50, 75, "4", 55)
   text["levelFive"] = TextField.create(-16, 248, 50, 75, "5", 55)
   
   
@@ -143,8 +164,10 @@ function ViewControl:levelSelectionPopup(level)
   -- Text
   text["currentLevel"] = TextField.create(-35, 230, 350, 75, level, 55)
   
+  print("The level is: "..currentLevel)
+  
   text["levelTimeTitle"] = TextField.create(-100, -60, 350, 75, "Best Time", 45)
-  text["levelTime"] = TextField.create(-70, -140, 250, 80, tostring(user_data.levelData["level1"]), 55)
+  text["levelTime"] = TextField.create(-70, -140, 250, 80, tostring(user_data.levelData[currentLevel]["time"]), 55)
   
   --Prizes
   button["goldPrize"] = Button.create(4, 158, resourceManager:getTexture("emptyPrizeBig"))
@@ -223,7 +246,7 @@ function ViewControl:gamePopupWin()
   end
    
   local highscore = {}
-  for k, v in string.gmatch(user_data.levelData["level1"], "(%w+):(%w+)") do
+  for k, v in string.gmatch(user_data.levelData[currentLevel]["time"], "(%w+):(%w+)") do
     highscore["minute"] = k
     highscore["second"] = v
   end
@@ -235,19 +258,22 @@ function ViewControl:gamePopupWin()
   
   if totalCondition < totalHighscore then
     
-    user_data.levelData["level1"] = winTime
+    user_data.levelData[currentLevel]["time"] = winTime
     save_user_data()
     
   end
   
   text["levelTime"] = TextField.create(-86, -120, 250, 80, "Time: "..tostring(winTime), 35)
-  text["levelBestTime"] = TextField.create(-160, -180, 350, 80, "Best time: "..tostring(user_data.levelData["level1"]), 35)
+  text["levelBestTime"] = TextField.create(-160, -180, 350, 80, "Best time: "..tostring(user_data.levelData[currentLevel]["time"]), 35)
   
   --Prizes
   text["levelWinTitle"] = TextField.create(-165, 210, 450, 75, "LEVEL COMPLETED!", 35)
   button["goldPrize"] = Button.create(4, 118, resourceManager:getTexture("emptyPrizeBig"))
   button["silverPrize"] = Button.create(140, 70, resourceManager:getTexture("emptyPrizeSmall"))
   button["bronzePrize"] = Button.create(-140, 70, resourceManager:getTexture("emptyPrizeSmall"))
+  
+  user_data.levelData[currentLevel]["status"] = "complete"
+  save_user_data()
   
   -- Freeze game
   gameTime:stop()
@@ -278,11 +304,11 @@ function ViewControl:loadLevel()
   
   player = Player.create()
   player:make()
-  blockGenerator = Blockinator.create()
-
-  blockGenerator:make()
   
-  progressBar:drawProgressBarImage(5)
+  
+  blockGenerator = Blockinator.create(currentLevel)
+  blockGenerator:make()
+  progressBar:drawProgressBarImage(blockGenerator:getAmountParts())
   
   button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
   

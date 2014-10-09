@@ -10,11 +10,11 @@ local function init ( objects )
 
   table [ "levelData" ] = {
     
-    ["level1"] = "05:00",
-    ["level2"] = "05:00",
-    ["level3"] = "05:00",
-    ["level4"] = "05:00",
-    ["level5"] = "05:00"
+    ["level1"] = {["time"] = "05:00", ["status"] = "incomplete"},
+    ["level2"] = {["time"] = "05:00", ["status"] = "incomplete"},
+    ["level3"] = {["time"] = "05:00", ["status"] = "incomplete"},
+    ["level4"] = {["time"] = "05:00", ["status"] = "incomplete"},
+    ["level5"] = {["time"] = "05:00", ["status"] = "incomplete"}
     
     }
 

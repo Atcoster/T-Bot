@@ -56,6 +56,8 @@ blocks = {}
 blockGenerator = {}
 resourceManager = {}
 
+currentLevel = ""
+
 mouseStartX = 0
 
 gameView = {}
