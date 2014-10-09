@@ -64,6 +64,9 @@ end
 
 function Progressbar:drawProgressBarImage(amountParts)
   
+  self._prop = MOAIProp2D.new ()
+  self._sprite = MOAIGfxQuad2D.new()
+    
   self._partAmountMath = 290 / amountParts
   self._partAmount = amountParts
   

@@ -45,6 +45,9 @@ layer:setPartition(partition)
 ----------------------------
 -- Global vars
 ----------------------------
+MOAIUntzSystem.initialize()
+MOAIUntzSystem.setVolume(1)
+
 button = {}
 text = {}
 view = {}
@@ -69,6 +72,9 @@ props = {}
 
 require("Helpers/resourceManager")
 resourceManager = ResourceManager.create()
+
+require("Helpers/soundManager")
+soundManager = SoundManager.create()
 
 require("Helpers/progressbar")
 progressBar = Progressbar.create()

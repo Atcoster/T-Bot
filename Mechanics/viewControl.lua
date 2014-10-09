@@ -59,7 +59,6 @@ function clearView()
   button = {}
   text = {}
   view = {}
-  --player = {}
   bullet = {}
   blocks = {}
   blockGenerator = {}
@@ -74,6 +73,8 @@ function ViewControl:loadMainMenu()
   
   clearView()
   gameState = "Menu"
+  
+  soundManager:playMusic("mainTheme")
   
   view["mainMenu"] = View.create(resourceManager:getTexture("Mainbackground"))
   
@@ -93,6 +94,9 @@ end
 function ViewControl:loadLevelSelectMenu()
   
   clearView()
+  
+  soundManager:playMusic("mainTheme")
+  
   gameState = "LevelSelection"
   
   view["selectView"] = View.create(resourceManager:getTexture("selectbackground"))
@@ -175,6 +179,29 @@ function ViewControl:gamePopup()
 end
 
 ----------------------------
+-- In game pop up LOSE
+----------------------------
+function ViewControl:gamePopupLose()
+  
+  --Background
+  button["popupBackground"] = Button.create(0, 0, resourceManager:getTexture("pausePopupBackground"))
+  
+  --Buttons
+  button["popupGameStop"] = Button.create(-70, -50, resourceManager:getTexture("poplevelSelectButton"))
+  button["popupGameRestart"] = Button.create(80, -50, resourceManager:getTexture("popReplayButton"))
+  
+  -- Text  
+  text["gamePauseTitle"] = TextField.create(-120, 60, 350, 75, "YOU LOSE!", 45)
+  
+  -- Freeze game
+  gameTime:stop()
+  player:setMovement(false)
+  gameState = "gameLost"
+  
+  
+end
+
+----------------------------
 -- In game pop up WIN
 ----------------------------
 function ViewControl:gamePopupWin()
@@ -238,6 +265,8 @@ function ViewControl:loadLevel()
   
   clearView()
   
+  soundManager:playMusic("gameTheme")
+  
   gameState = "Playfield"
   
   view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
@@ -253,7 +282,7 @@ function ViewControl:loadLevel()
 
   blockGenerator:make()
   
-  progressBar:drawProgressBarImage(1)
+  progressBar:drawProgressBarImage(5)
   
   button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
   
@@ -275,6 +304,12 @@ function ViewControl:loadLevel()
     seconds = seconds - 1
     
     if seconds < 10 and seconds >= 0 then
+      
+       if seconds == 0 and minutes == 0 then
+      
+        self:gamePopupLose()
+      
+      end
       
       seconds = "0"..seconds
     

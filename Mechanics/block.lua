@@ -322,7 +322,15 @@ function Block:explosion(x,y)
             
           else
           
-           blocks[key]:destruction()
+           if blocks[key]:getUserdata(1) == "part" and blocks[key]:getDestructionState() == false  then
+            
+              gameView:gamePopupLose()
+            
+           else
+             
+             blocks[key]:destruction()
+             
+           end
           
           end
             

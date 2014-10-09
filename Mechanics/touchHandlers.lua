@@ -172,6 +172,25 @@ function downAction(x,y,touchedProp)
   end
   
   --------------------
+  ---- Lose mode 
+  --------------------
+  if gameState == "gameLost" then 
+    
+    if touchedProp == button["popupGameStop"]:getProp() then
+      
+      gameView:loadLevelSelectMenu()
+      
+    end
+    
+    if touchedProp == button["popupGameRestart"]:getProp() then
+      
+      gameView:loadLevel()
+      
+    end
+    
+  end
+  
+  --------------------
   ---- Game mode 
   --------------------
   if gameState == "Playfield" then        
