@@ -100,6 +100,7 @@ function Block.create(x, y, blockType)
             
             progressBar:moveProgressbarImage()
             blk:destruction()
+            soundManager:playMusic("PartPicked")
             
             if progressBar:getRemainingParts() == 0 then
             
@@ -275,6 +276,7 @@ end
 function Block:freeze(x,y)
   
   self:animate(7, 0.05,"freezeBomb", x, y)
+  soundManager:playMusic("bombFreeze")
   
 end
 
@@ -283,6 +285,7 @@ function Block:melt(x,y)
   self._destruction = true
   layer:removeProp(self._prop)
   self._body:destroy()
+  soundManager:playMusic("meltMetal")
   
   self:animate(7, 0.05,"meltMetal", x, y)
   
@@ -303,6 +306,7 @@ function Block:explosion(x,y)
   self._destruction = true
   layer:removeProp(self._prop)
   self._body:destroy()
+  
   
  for key,value in pairs(blocks) do
 
