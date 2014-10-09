@@ -29,10 +29,14 @@ if MOAIInputMgr.device.pointer then
 else
 
 -- For touch devices
-  
+  MOAIInputMgr.device.touch:setTapTime(0)
   MOAIInputMgr.device.touch:setCallback (
-
+  
+  
+  
     function ( eventType, idx, x, y, tapCount )
+        
+        
         
         local touchedProp = partition:propForPoint(layer:wndToWorld(x, y))
         
