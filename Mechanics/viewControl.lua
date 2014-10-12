@@ -78,13 +78,13 @@ function ViewControl:loadMainMenu()
   
   view["mainMenu"] = View.create(resourceManager:getTexture("Mainbackground"))
   
-  button["mainMenuStartButton"] = Button.create(0, 165, resourceManager:getTexture("mainMenuButton"))
-  button["mainMenuSettingsButton"] = Button.create(0, 5, resourceManager:getTexture("mainMenuButton"))
-  button["mainMenuAboutButton"] = Button.create(0, -165, resourceManager:getTexture("mainMenuButton"))
+  button["mainMenuStartButton"] = Button.create(0, 80, resourceManager:getTexture("mainMenuButton"))
+ -- button["mainMenuSettingsButton"] = Button.create(0, 5, resourceManager:getTexture("mainMenuButton"))
+ -- button["mainMenuAboutButton"] = Button.create(0, -165, resourceManager:getTexture("mainMenuButton"))
   
-  text["mainStart"] = TextField.create(-100, 130, 220, 75, "START", 65)
-  text["mainSettings"] = TextField.create(-160, -30, 340, 75, "SETTINGS", 65)
-  text["mainAbout"] = TextField.create(-120, -200, 240, 75, "ABOUT", 65)
+  text["mainStart"] = TextField.create(-100, 45, 220, 75, "START", 65)
+ -- text["mainSettings"] = TextField.create(-160, -30, 340, 75, "SETTINGS", 65)
+ -- text["mainAbout"] = TextField.create(-120, -200, 240, 75, "ABOUT", 65)
   
 end
 
@@ -221,7 +221,7 @@ function ViewControl:gamePopupLose()
   player:setMovement(false)
   gameState = "gameLost"
   
-  
+   soundManager:playMusic("loseTheme")
 end
 
 ----------------------------
@@ -279,8 +279,9 @@ function ViewControl:gamePopupWin()
   gameTime:stop()
   player:setMovement(false)
   gameState = "gameWon"
-  
-  
+
+  soundManager:getSound("winTheme"):play()
+
 end
 
 
@@ -361,8 +362,8 @@ function ViewControl:loadLevel()
     
     winTime = "0"..tostring(winMin)..":"..tostring(winSecs)
     
-    text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
-    
+    --text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
+    text["gameTime"]:setText(tostring(motionManager:getPos()))
   end
   
   gameTime:setSpan(1)

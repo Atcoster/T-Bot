@@ -36,6 +36,10 @@ end)
 function update() 
     
     if gameState == "Playfield" then
+      --------------
+      --motionsensor
+      --------------
+      
       ---------------
       -- Bullets
       ---------------
@@ -65,6 +69,8 @@ function update()
     ---------------
     -- Player
     ---------------
+    mouseStartX = mouseStartX+acceloSpeed
+    
     if player:getMovement() == true then 
       
       local playerX, playerY = player:getPlayerBody():getPosition()

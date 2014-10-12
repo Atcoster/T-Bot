@@ -52,13 +52,13 @@ function Bullet:make()
     
     self._prop:setDeck(resourceManager:getTexture("fireMissileSheet"))
     self._fixture.userdata[2] = "fire"
-    soundManager:playMusic("PowerupShoot")
+    --soundManager:playMusic("PowerupShoot")
     
   elseif player:getWeaponType() == "freeze" then
     
     self._prop:setDeck(resourceManager:getTexture("freezeMissileSheet"))
     self._fixture.userdata[2] = "freeze"
-    soundManager:playMusic("PowerupShoot")
+    --soundManager:playMusic("PowerupShoot")
     
   end
   

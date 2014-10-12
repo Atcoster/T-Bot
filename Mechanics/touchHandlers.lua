@@ -1,6 +1,7 @@
 ---------------------------
 -- Mouse handlers
 ----------------------------
+
 if MOAIInputMgr.device.pointer then 
   
   -- For mouse clicks
@@ -28,15 +29,12 @@ if MOAIInputMgr.device.pointer then
 
 else
 
+
 -- For touch devices
   MOAIInputMgr.device.touch:setTapTime(0)
   MOAIInputMgr.device.touch:setCallback (
-  
-  
-  
+
     function ( eventType, idx, x, y, tapCount )
-        
-        
         
         local touchedProp = partition:propForPoint(layer:wndToWorld(x, y))
         
@@ -52,6 +50,9 @@ else
         
         if (tapCount > 1) then
         
+        elseif eventType == MOAITouchSensor.TOUCH_MOVE then
+        
+        moveAction(x,y,touchedprop)
         
         elseif eventType == MOAITouchSensor.TOUCH_DOWN then
         
@@ -67,9 +68,21 @@ else
 
 end
 
-
 ----------------------------------------
------------ Mouse down -----------------
+----------- Mouse Move -----------------
+----------------------------------------
+function moveAction(x,y,touchedProp)
+if gameState == "Playfield" then
+   if y < -200 and y > -400 and player:getMovement() == true then
+           
+         mouseStartX = x
+         
+      end
+  
+  end
+end
+----------------------------------------
+----------- Touch down -----------------
 ----------------------------------------
 function downAction(x,y,touchedProp)
   
@@ -180,7 +193,13 @@ function downAction(x,y,touchedProp)
   --------------------
   if gameState == "gameWon" then 
     
-    if(touchedProp == button["popupLevelPlay"]:getProp()) then gameView:loadLevel() end
+    if(touchedProp == button["popupLevelPlay"]:getProp()) then 
+    if currentLevel =="level1" then currentLevel="level2" 
+    elseif currentLevel =="level2" then currentLevel="level3" 
+    elseif currentLevel =="level3" then currentLevel="level4" 
+    elseif currentLevel =="level4" then currentLevel="level5" 
+    elseif currentLevel =="level5" then currentLevel="level1" end
+      gameView:loadLevel() end
     
     if touchedProp == button["popupGameRestart"]:getProp() then
       
@@ -229,14 +248,9 @@ function downAction(x,y,touchedProp)
     if touchedProp == player:getPlayerProp() and player:getMovement() == true then
     
       table.insert(bullet, Bullet.create(player:getPlayerBody():getPosition()))
+      
+      soundManager:getSound("MissileShoot"):play()
 
-    else
-    
-      if y < -300 and y > -400 and player:getMovement() == true then
-           
-         mouseStartX = x
-         
-      end
     
     end
     
