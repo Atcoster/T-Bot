@@ -5,8 +5,6 @@ Block = {}
 Block.__index = Block
 
 local bombCount = 1
-local blockVictim = {}
-local victimCount = 1
 
 ----------------------------
 -- Constructor

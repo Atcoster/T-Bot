@@ -1,3 +1,29 @@
+----------------------------
+-- MOAI Setup
+----------------------------
+
+----------------------------
+-- FOR PC TESTING
+----------------------------
+local gameName = "T-Bot"
+local screenWidth = 320
+local screenHeight = 480
+
+deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
+deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
+
+-- Open a window for testing, used on pc, skipped when on mobile
+MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
+
+-- Making the viewport
+viewport = MOAIViewport.new()
+viewport:setSize(deviceScreenWidth, deviceScreenHeight)
+viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
+
+----------------------------
+-- FOR MOBILE TESTING
+----------------------------
+--[[
 local gameName = "T-Bot"
 gameWidth = 480
 gameHeight = 320
@@ -31,6 +57,8 @@ local realAspect = deviceHeight / deviceWidth
 viewport = MOAIViewport.new()
 viewport:setSize ( screenXOffset, 0, screenXOffset + screenWidth,  screenHeight*1.5 )
 viewport:setScale ( gameWidth*1.33, gameHeight*3.33 )
+--]]
+
 ----------------------------
 -- Adding layers
 ----------------------------
@@ -66,7 +94,6 @@ view = {}
 bullet = {}
 blocks = {}
 blockGenerator = {}
-resourceManager = {}
 
 currentLevel = ""
 
