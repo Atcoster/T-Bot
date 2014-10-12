@@ -1,24 +1,36 @@
-----------------------------
--- MOAI Setup
-----------------------------
 local gameName = "T-Bot"
-local screenWidth = 320
-local screenHeight = 480
+gameWidth = 480
+gameHeight = 320
+screenXOffset = 0
+screenYOffset = 0
 
-----------------------------
--- Device Screen setup
-----------------------------
-deviceScreenWidth  = MOAIEnvironment.horizontalResolution or screenWidth
-deviceScreenHeight = MOAIEnvironment.verticalResolution or screenHeight
+MOAISim.openWindow( gameName, gameWidth, gameHeight )
+ 
+deviceWidth, deviceHeight = MOAIGfxDevice.getViewSize()
+ 
+ 
+local gameAspect = gameHeight / gameWidth
+local realAspect = deviceHeight / deviceWidth
+ 
+ if realAspect > gameAspect then
+    screenWidth = deviceWidth
+    screenHeight = deviceHeight * gameAspect
+ else
+    screenWidth = deviceHeight / gameAspect
+    screenHeight = deviceHeight
+ end
 
--- Open a window for testing, used on pc, skipped when on mobile
-MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
+ if screenWidth < deviceWidth then
+    screenXOffset = ( deviceWidth - screenWidth ) * 0.5
+ end
 
--- Making the viewport
+ if screenHeight < deviceHeight then
+    screenYOffset = ( deviceHeight - screenHeight ) * 0.5
+ end
+
 viewport = MOAIViewport.new()
-viewport:setSize(deviceScreenWidth, deviceScreenHeight)
-viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
-
+viewport:setSize ( screenXOffset, 0, screenXOffset + screenWidth,  screenHeight*1.5 )
+viewport:setScale ( gameWidth*1.33, gameHeight*3.33 )
 ----------------------------
 -- Adding layers
 ----------------------------
@@ -59,6 +71,8 @@ resourceManager = {}
 currentLevel = ""
 
 mouseStartX = 0
+acceloSpeed = 0
+tiltControl = false
 
 gameView = {}
 gameState = {}
@@ -77,6 +91,9 @@ resourceManager = ResourceManager.create()
 
 require("Helpers/soundManager")
 soundManager = SoundManager.create()
+
+require("Helpers/motionManager")
+motionManager = MotionManager.create()
 
 require("Helpers/progressbar")
 progressBar = Progressbar.create()
