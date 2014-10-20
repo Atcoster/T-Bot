@@ -33,14 +33,25 @@ function ResourceManager:loadResources()
   images["GameBackground"]:load("Assets/img/BlueBG.png")
   images["GameBackground"]:invalidate()
   
+  -----------------------
+  --MainMenu
+  -----------------------
   images["Mainbackground"] = MOAIImageTexture.new()
   images["Mainbackground"]:load("Assets/img/Views/Main/Main.png")
   images["Mainbackground"]:invalidate()
   
+
+  
+  -----------------------
+  --Level selection
+  -----------------------
   images["selectbackground"] = MOAIImageTexture.new()
-  images["selectbackground"]:load("Assets/img/Views/Levels/level-background.png")
+  images["selectbackground"]:load("Assets/img/Views/Levels/background.png")
   images["selectbackground"]:invalidate()
   
+  -----------------------
+  --PopUps
+  -----------------------
   images["popupBackground"] = MOAITexture.new()
   images["popupBackground"]:load("Assets/img/Views/Popups/popupBG.png")
   
@@ -101,16 +112,29 @@ function ResourceManager:loadResources()
   -- Buttons
   ------------------------
   
-  -- Main menu buttons
-  images["mainMenuButton"] = MOAITexture.new()
-  images["mainMenuButton"]:load("Assets/img/Views/Main/clean.png")
   
-  images["mainMenuButtonHover"] = MOAITexture.new()
-  images["mainMenuButtonHover"]:load("Assets/img/Views/Main/tbotjes.png")
+  -- Main menu buttons / logo
+ images["settingsimg"] = MOAITexture.new()
+  images["settingsimg"]:load("Assets/img/Views/Main/settingsBtn.png")
+  
+   images["aboutimg"] = MOAITexture.new()
+  images["aboutimg"]:load("Assets/img/Views/Main/aboutBtn.png")
+  
+   images["startimg"] = MOAITexture.new()
+  images["startimg"]:load("Assets/img/Views/Main/startBtn.png")
+
+   images["logoAnim"] = MOAITexture.new()
+  images["logoAnim"]:load("Assets/img/Views/Main/ding.png")
+  
+  images["removeadsimg"] = MOAITexture.new()
+  images["removeadsimg"]:load("Assets/img/Views/Main/removeadsBtn.png")
+  
+  --images["settingsBtn"]:setSize(100,100)
+  --images["settingsBtn"]:setRect(-100, -100, 100, 100)
   
   -- Level Select buttons
   images["levelActiveButton"] = MOAITexture.new()
-  images["levelActiveButton"]:load("Assets/img/Views/Levels/stage-active.png")
+  images["levelActiveButton"]:load("Assets/img/Views/Levels/activeInactiveSprite.png")
   
   images["levelInactiveButton"] = MOAITexture.new()
   images["levelInactiveButton"]:load("Assets/img/Views/Levels/stage-inactive.png")
@@ -200,7 +224,7 @@ function ResourceManager:loadResources()
   
   images["explosion"] = MOAITileDeck2D.new()
   images["explosion"]:setTexture("Assets/img/Animations/explosion-sprite.png")
-  images["explosion"]:setSize(9,1)
+  images["explosion"]:setSize(100,100)
   images["explosion"]:setRect(-72, -72, 72, 72)
   
   images["meltMetal"] = MOAITileDeck2D.new()

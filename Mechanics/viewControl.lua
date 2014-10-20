@@ -57,6 +57,7 @@ function clearView()
   
   -- Reset arrays
   button = {}
+  anim = {}
   text = {}
   view = {}
   bullet = {}
@@ -78,11 +79,19 @@ function ViewControl:loadMainMenu()
   
   view["mainMenu"] = View.create(resourceManager:getTexture("Mainbackground"))
   
-  button["mainMenuStartButton"] = Button.create(0, 80, resourceManager:getTexture("mainMenuButton"))
- -- button["mainMenuSettingsButton"] = Button.create(0, 5, resourceManager:getTexture("mainMenuButton"))
+  button["startBtn"] = Button.create(0, 170, resourceManager:getTexture("startimg"),1,2)
+  button["settingsBtn"] = Button.create(0, 50, resourceManager:getTexture("settingsimg"),1,2)
+  button["aboutBtn"] = Button.create(0, -70, resourceManager:getTexture("aboutimg"),1,2)
+  button["removeadsBtn"] = Button.create(0, -190, resourceManager:getTexture("removeadsimg"),1,2)
+  anim["mainLogo"] = Animator.create(0, 350, resourceManager:getTexture("logoAnim"),9,2)
+  
+  --button["mainMenuStartButton"] Button:makeTest()
+
+
  -- button["mainMenuAboutButton"] = Button.create(0, -165, resourceManager:getTexture("mainMenuButton"))
   
-  text["mainStart"] = TextField.create(-100, 45, 220, 75, "START", 65)
+
+ -- text["mainStart"] = TextField.create(-100, 45, 220, 75, "START", 65)
  -- text["mainSettings"] = TextField.create(-160, -30, 340, 75, "SETTINGS", 65)
  -- text["mainAbout"] = TextField.create(-120, -200, 240, 75, "ABOUT", 65)
   
@@ -108,33 +117,33 @@ function ViewControl:loadLevelSelectMenu()
   button["levelBackButton"] = Button.create(250, -390, resourceManager:getTexture("backButton"))
   
   --Levels
-  button["levelOne"] = Button.create(0, -280, resourceManager:getTexture("levelActiveButton"))
-  button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelInactiveButton"))
-  button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelInactiveButton"))
-  button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelInactiveButton"))
-  button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelInactiveButton"))
+  button["levelOne"] = Button.create(0, -280, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"),2,1)
   
-  if user_data.levelData["level1"]["status"] == "complete" then 
+  if user_data.levelData["level1"]["status"] ~= "complete" then 
     
-    button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelActiveButton"))
+    button["levelTwo"]:getProp():setIndex(1)
   
   end
   
   if user_data.levelData["level2"]["status"] == "complete" then 
     
-    button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"))
+   -- button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"))
   
   end
   
   if user_data.levelData["level3"]["status"] == "complete" then 
   
-    button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"))
+    --button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"))
   
   end
   
   if user_data.levelData["level4"]["status"] == "complete" then   
   
-    button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"))
+    --button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"))
   
   end
   
@@ -381,12 +390,12 @@ function ViewControl:loadLevel()
 
   -- Right Wall
   bodies[1] = world:addBody( MOAIBox2DBody.STATIC )
-  bodies[1]:setTransform( 330, 55 )  
+  bodies[1]:setTransform( 360, 55 )  
   fixtures[1] = bodies[1]:addRect( -10, -420, 10, 420 )
 
   -- Left Wall
   bodies[2] = world:addBody( MOAIBox2DBody.STATIC )
-  bodies[2]:setTransform( -330, 55 )  
+  bodies[2]:setTransform( -360, 55 )  
   fixtures[2] = bodies[2]:addRect( -10, -420, 10, 420 )
 
 end

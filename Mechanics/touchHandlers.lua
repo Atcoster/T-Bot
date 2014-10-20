@@ -88,10 +88,14 @@ function downAction(x,y,touchedProp)
   
   if gameState == "Menu" then
           
-    if(touchedProp == text["mainStart"]:getTextProp()) then
-      
-      gameView:loadLevelSelectMenu()
-
+   if(touchedProp == button["settingsBtn"]:getProp()) then
+       button["settingsBtn"]:getProp():setIndex(2) 
+   elseif(touchedProp == button["aboutBtn"]:getProp()) then
+       button["aboutBtn"]:getProp():setIndex(2) 
+    elseif(touchedProp == button["startBtn"]:getProp()) then
+       button["startBtn"]:getProp():setIndex(2) 
+    elseif(touchedProp == button["removeadsBtn"]:getProp()) then
+    button["removeadsBtn"]:getProp():setIndex(2) 
     end
     
   end
@@ -352,6 +356,16 @@ end
 ----------------------------------------
 function releaseAction(x,y,touchedProp)
   
+  if gameState == "Menu" then
+    if(touchedProp == button["startBtn"]:getProp()) then
+       button["startBtn"]:getProp():setIndex(1)
+       gameView:loadLevelSelectMenu()
+       end
+        button["aboutBtn"]:getProp():setIndex(1)
+        button["settingsBtn"]:getProp():setIndex(1)
+        button["removeadsBtn"]:getProp():setIndex(1)
+    
+    end
   --------------------
   ---- Player 
   --------------------
