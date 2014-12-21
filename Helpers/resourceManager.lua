@@ -6,7 +6,7 @@ ResourceManager.__index = ResourceManager
 
 local images = {}
 local sounds = {}
-
+local strings={}
 ----------------------------
 -- Constructor
 ----------------------------
@@ -49,6 +49,14 @@ function ResourceManager:loadResources()
   images["selectbackground"]:load("Assets/img/Views/Levels/background.png")
   images["selectbackground"]:invalidate()
   
+  images["selectTopBar"] = MOAIImageTexture.new()
+  images["selectTopBar"]:load("Assets/img/Views/Levels/levelTopBar.png")
+  images["selectTopBar"]:invalidate()
+  
+  images["selectBottomBar"] = MOAIImageTexture.new()
+  images["selectBottomBar"]:load("Assets/img/Views/Levels/levelBottom.png")
+  images["selectBottomBar"]:invalidate()
+  
   -----------------------
   --PopUps
   -----------------------
@@ -83,6 +91,10 @@ function ResourceManager:loadResources()
   
   images["frozenBomb"] = MOAITexture.new()
   images["frozenBomb"]:load("Assets/img/blocks/bomb-frozen.png")
+  
+  
+  images["air"] = MOAITexture.new()
+  images["air"]:load("Assets/img/blocks/air.png")
   
   --Parts
   for i = 1, 10 do
@@ -139,8 +151,11 @@ function ResourceManager:loadResources()
   images["levelInactiveButton"] = MOAITexture.new()
   images["levelInactiveButton"]:load("Assets/img/Views/Levels/stage-inactive.png")
   
-  images["levelSelectButton"] = MOAITexture.new()
-  images["levelSelectButton"]:load("Assets/img/Views/Levels/level-arrow.png")
+  images["levelSelectForward"] = MOAITexture.new()
+  images["levelSelectForward"]:load("Assets/img/Views/Levels/rightArrow.png")
+  
+   images["levelSelectBack"] = MOAITexture.new()
+  images["levelSelectBack"]:load("Assets/img/Views/Levels/leftArrow.png")
   
   -- In game menu
   images["gameTopMenu"] = MOAITexture.new()
@@ -194,7 +209,7 @@ function ResourceManager:loadResources()
   
   -- Overall Game buttons
   images["backButton"] = MOAITexture.new()
-  images["backButton"]:load("Assets/img/Views/backBtn.png")
+  images["backButton"]:load("Assets/img/Views/Levels/backButton.png")
   
   images["pauseButton"] = MOAITexture.new()
   images["pauseButton"]:load("Assets/img/Views/pauze.png")
@@ -224,8 +239,13 @@ function ResourceManager:loadResources()
   
   images["explosion"] = MOAITileDeck2D.new()
   images["explosion"]:setTexture("Assets/img/Animations/explosion-sprite.png")
-  images["explosion"]:setSize(100,100)
+  images["explosion"]:setSize(9,1)
   images["explosion"]:setRect(-72, -72, 72, 72)
+  
+    images["portal"] = MOAITileDeck2D.new()
+  images["portal"]:setTexture("Assets/img/blocks/portal-block.png")
+  images["portal"]:setSize(7,1)
+  images["portal"]:setRect(-24, -24, 24, 24)
   
   images["meltMetal"] = MOAITileDeck2D.new()
   images["meltMetal"]:setTexture("Assets/img/Animations/metal-melt.png")
@@ -244,8 +264,20 @@ function ResourceManager:loadResources()
   
 end
 
+function ResourceManager:loadStringResources()
+  strings["tutorial"][1][0]="Hello and welcome to the T-factory."
+  strings["tutorial"][1][2]="Hello and welcome to the T-factory."
+  strings["tutorial"][1][3]="Hello and welcome to the T-factory."
+  strings["tutorial"][1][4]="Hello and welcome to the T-factory."
+  end
+
 function ResourceManager:getTexture(name)
   
   return images[name]
+  
+end
+function ResourceManager:getString(name)
+  
+  return  strings[name]
   
 end

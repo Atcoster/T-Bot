@@ -95,7 +95,9 @@ bullet = {}
 blocks = {}
 blockGenerator = {}
 
-currentLevel = ""
+levelAmount = 0
+currentPage = 1
+currentLevel = 1
 
 mouseStartX = 0
 acceloSpeed = 0
@@ -142,3 +144,5 @@ require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
 require("Mechanics/viewControl")
 require("game")
+
+levelAmount = Blockinator:getLevelAmount()
