@@ -7,14 +7,15 @@ Bullet.__index = Bullet
 ----------------------------
 -- Constructor
 ----------------------------
-function Bullet.create(x,y,z)
+function Bullet.create(x,y)
+  
   local blt = {}
   setmetatable(blt, Bullet)
   
   blt._speed = 5
   blt._destruction = false
-  blt._direction = z or "up"
-  blt._teleportable = false
+  blt._direction = "up"
+  
   -- Body
   blt._body = world:addBody(MOAIBox2DBody.KINEMATIC)
   blt._body:setTransform(x,y+50)  
@@ -23,15 +24,15 @@ function Bullet.create(x,y,z)
   blt._fixture = blt._body:addRect(-12,-12,12,12)
   blt._fixture.userdata = {"Bullet", "normal"}
   
-  -- teleport coordinates
-
+ 
+  
    -- Texture
   blt._animation = MOAIAnim:new()
   blt._curve = MOAIAnimCurve.new()
   blt._prop = MOAIProp2D.new()
   
   blt:make()
-  blt:makeTeleportable()
+  
   return blt
   
 end
@@ -86,7 +87,7 @@ end
 
 function Bullet:move()
   
-  local x,y = self:getPosition()
+  local x,y = self._body:getPosition()
   
   if self._direction == "up" then
     
@@ -108,11 +109,8 @@ function Bullet:move()
     self._prop:setRot(90)
     self._body:setTransform(x - self._speed, y)
   
-end
-
-  --reset teleport
-  self._teleportX = nil
-  self._teleportY = nil
+  end
+  
 end
 
 function Bullet:destruction()
@@ -120,11 +118,7 @@ function Bullet:destruction()
   self._destruction = true
   layer:removeProp(self._prop)
   self._body:destroy()
-  for key,value in pairs(bullet) do
-    if bullet[key] == self then
-      table.remove(bullet,key)
-    end
-    end
+  
 end
 
 function Bullet:setDirection(state)
@@ -132,31 +126,14 @@ function Bullet:setDirection(state)
   self._direction = state
 
 end
-function Bullet:makeTeleportable()
-  if self._teleportable == false then
-  function resetTel() self._teleportable = true end
-    local timer3 = MOAITimer.new()
-    timer3:setSpan(0.15)
-    timer3:setMode(MOAITimer.NORMAL)
-    timer3:setListener(MOAITimer.EVENT_TIMER_END_SPAN,resetTel)
-    timer3:start()
-    end
-end
 
-function Bullet:getPosition()
-  
- 
-    return self._body:getPosition()
-  
- end
 function Bullet:getBulletBody() return self._body end
 
 function Bullet:getDestructionState() return self._destruction end
 
 function Bullet:getBulletType() return self._type end
 
-function Bullet:getDirection() return self._direction end
 
-function Bullet:getTeleportable() return self._teleportable end
+
 
 

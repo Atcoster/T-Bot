@@ -5,6 +5,10 @@ ResourceManager = {}
 ResourceManager.__index = ResourceManager
 
 local images = {}
+<<<<<<< HEAD
+=======
+local sounds = {}
+>>>>>>> parent of 8623f35... Very much changed , do not remember what but it works :')
 
 ----------------------------
 -- Constructor
@@ -40,6 +44,12 @@ function ResourceManager:loadResources()
   images["selectbackground"]:load("Assets/img/Views/Levels/level-background.png")
   images["selectbackground"]:invalidate()
   
+<<<<<<< HEAD
+=======
+  -----------------------
+  --PopUps
+  -----------------------
+>>>>>>> parent of 8623f35... Very much changed , do not remember what but it works :')
   images["popupBackground"] = MOAITexture.new()
   images["popupBackground"]:load("Assets/img/Views/Popups/popupBG.png")
   
@@ -199,7 +209,7 @@ function ResourceManager:loadResources()
   
   images["explosion"] = MOAITileDeck2D.new()
   images["explosion"]:setTexture("Assets/img/Animations/explosion-sprite.png")
-  images["explosion"]:setSize(9,1)
+  images["explosion"]:setSize(100,100)
   images["explosion"]:setRect(-72, -72, 72, 72)
   
   images["meltMetal"] = MOAITileDeck2D.new()

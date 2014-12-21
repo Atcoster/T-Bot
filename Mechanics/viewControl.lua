@@ -2,7 +2,6 @@
 -- Variables
 ----------------------------
 ViewControl = {}
-tutorialStrings={}
 ViewControl.__index = ViewControl
 
 ----------------------------
@@ -44,13 +43,12 @@ function clearView()
   end
   
   -- Clear all text
-  --[[
   for key, value in pairs(text) do
     if text[key]:getTextProp() ~= nil then
       layer:removeProp(text[key]:getTextProp())
     end
   end
-  ]]--
+  
   
   -- Remove player if exist
   if player:getPlayerBody() ~= nil then
@@ -59,10 +57,8 @@ function clearView()
   
   -- Reset arrays
   button = {}
-  button["levels"] = {}
   anim = {}
   text = {}
-  text["lvlNum"]={}
   view = {}
   bullet = {}
   blocks = {}
@@ -86,7 +82,6 @@ function ViewControl:loadMainMenu()
   button["startBtn"] = Button.create(0, 170, resourceManager:getTexture("startimg"),1,2)
   button["settingsBtn"] = Button.create(0, 50, resourceManager:getTexture("settingsimg"),1,2)
   button["aboutBtn"] = Button.create(0, -70, resourceManager:getTexture("aboutimg"),1,2)
-  
   button["removeadsBtn"] = Button.create(0, -190, resourceManager:getTexture("removeadsimg"),1,2)
   anim["mainLogo"] = Animator.create(0, 350, resourceManager:getTexture("logoAnim"),9,2)
   
@@ -114,30 +109,50 @@ function ViewControl:loadLevelSelectMenu()
   gameState = "LevelSelection"
   
   view["selectView"] = View.create(resourceManager:getTexture("selectbackground"))
-  button["selectTop"] = Button.create(0, -420, resourceManager:getTexture("selectBottomBar"))
-  button["selectBottom"] = Button.create(0, 420, resourceManager:getTexture("selectTopBar"))
   
-
-  button["levelDownButton"] = Button.create(265, 420, resourceManager:getTexture("levelSelectForward"),1,2)
-  button["levelUpButton"] = Button.create(-261, 420, resourceManager:getTexture("levelSelectBack"),1,2)
-  button["levelUpButton"]:getProp():setRot(0)
-  button["levelUpButton"]:getProp():setIndex(2); 
-  button["levelDownButton"]:getProp():setIndex(2); 
-  button["levelBackButton"] = Button.create(0, -410, resourceManager:getTexture("backButton"))
+  button["levelDownButton"] = Button.create(0, -440, resourceManager:getTexture("levelSelectButton"))
+  button["levelUpButton"] = Button.create(0, 440, resourceManager:getTexture("levelSelectButton"))
+  button["levelUpButton"]:getProp():setRot(180)
+  
+  button["levelBackButton"] = Button.create(250, -390, resourceManager:getTexture("backButton"))
   
   --Levels
-  local xb =-200
-    local yb = 290
-  for i=1,levelAmount do
+  button["levelOne"] = Button.create(0, -280, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelTwo"] = Button.create(-160, -90, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"),2,1)
+  button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"),2,1)
+  
+  if user_data.levelData["level1"]["status"] ~= "complete" then 
     
-      button["levels"][i] = Button.create(xb, yb, resourceManager:getTexture("levelActiveButton"),2,1)
-      text["lvlNum"][i] = TextField.create(xb-15, yb-30, 50, 75, ""..i, 55)
-     if xb == 200 then yb = yb-200 end
-     if xb ~= 200 then xb = xb+200 else xb = -200 end
-     if user_data.levelData[i-1] ~=nil then
-      if user_data.levelData[i-1]["status"]=="incomplete" then button["levels"][i]:getProp():setIndex(2) end
-     end
+    button["levelTwo"]:getProp():setIndex(1)
+  
   end
+  
+  if user_data.levelData["level2"]["status"] == "complete" then 
+    
+   -- button["levelThree"] = Button.create(166, -90, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  if user_data.levelData["level3"]["status"] == "complete" then 
+  
+    --button["levelFour"] = Button.create(166, 100, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  if user_data.levelData["level4"]["status"] == "complete" then   
+  
+    --button["levelFive"] = Button.create(0, 290, resourceManager:getTexture("levelActiveButton"))
+  
+  end
+  
+  text["levelOne"] = TextField.create(-16, -322, 50, 75, "1", 55)
+  text["levelTwo"] = TextField.create(-176, -130, 50, 75, "2", 55)
+  text["levelThree"] = TextField.create(150, -132, 50, 75, "3", 55)
+  text["levelFour"] = TextField.create(150, 58, 50, 75, "4", 55)
+  text["levelFive"] = TextField.create(-16, 248, 50, 75, "5", 55)
+  
   
 end
 
@@ -252,8 +267,8 @@ function ViewControl:gamePopupWin()
   
   if totalCondition < totalHighscore then
     
-   user_data.levelData[currentLevel]["time"] = winTime
-    --save_user_data()
+    user_data.levelData[currentLevel]["time"] = winTime
+    save_user_data()
     
   end
   
@@ -261,21 +276,21 @@ function ViewControl:gamePopupWin()
   text["levelBestTime"] = TextField.create(-160, -180, 350, 80, "Best time: "..tostring(user_data.levelData[currentLevel]["time"]), 35)
   
   --Prizes
-  text["levelWinTitle"] = TextField.create(-165, 210, 450, 75, "LEVEL COMPLETED!"..currentLevel, 35)
+  text["levelWinTitle"] = TextField.create(-165, 210, 450, 75, "LEVEL COMPLETED!", 35)
   button["goldPrize"] = Button.create(4, 118, resourceManager:getTexture("emptyPrizeBig"))
   button["silverPrize"] = Button.create(140, 70, resourceManager:getTexture("emptyPrizeSmall"))
   button["bronzePrize"] = Button.create(-140, 70, resourceManager:getTexture("emptyPrizeSmall"))
   
   user_data.levelData[currentLevel]["status"] = "complete"
-  
+  save_user_data()
   
   -- Freeze game
   gameTime:stop()
   player:setMovement(false)
   gameState = "gameWon"
-  
+
   soundManager:getSound("winTheme"):play()
-  save_user_data()
+
 end
 
 
@@ -289,7 +304,7 @@ function ViewControl:loadLevel()
   soundManager:playMusic("gameTheme")
   
   gameState = "Playfield"
- 
+  
   view["gamescreen"] = View.create(resourceManager:getTexture("GameBackground"))
   
   button["firePowerupButton"] = Button.create(-180, -440, resourceManager:getTexture("inactivePowerup"))
@@ -308,7 +323,7 @@ function ViewControl:loadLevel()
   button["topMenu"] = Button.create(0, 456, resourceManager:getTexture("gameTopMenu"))
   
   text["gameTime"] = TextField.create(20, 400, 150, 75, "5:00", 35)
-  text["gameCurrentLevel"] = TextField.create(120, 400, 150, 75, "Level "..currentLevel, 35)
+  text["gameCurrentLevel"] = TextField.create(120, 400, 150, 75, "Level 1-1", 35)
   
   -----------
   -- Timer --
@@ -356,8 +371,8 @@ function ViewControl:loadLevel()
     
     winTime = "0"..tostring(winMin)..":"..tostring(winSecs)
     
-    text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
-   -- text["gameTime"]:setText(tostring(motionManager:getPos()))
+    --text["gameTime"]:setText(tostring(minutes)..":"..tostring(seconds))
+    text["gameTime"]:setText(tostring(motionManager:getPos()))
   end
   
   gameTime:setSpan(1)
@@ -382,12 +397,5 @@ function ViewControl:loadLevel()
   bodies[2] = world:addBody( MOAIBox2DBody.STATIC )
   bodies[2]:setTransform( -360, 55 )  
   fixtures[2] = bodies[2]:addRect( -10, -420, 10, 420 )
-  
-    self:setTutorial(currentLevel)
-end
 
-function ViewControl:setTutorial(curlev)
-  self.tutorialStrings =  resourceManager:getString("tutorial")
-  self.tutorialStrings = tutorialStrings[curlev]
-  log(table.getn(tutorialStrings))
-  end
+end

@@ -10,18 +10,16 @@ local bombCount = 1
 -- Constructor
 ----------------------------
 
-function Block.create(x, y, blockType,teleport)
+function Block.create(x, y, blockType)
 
   local blk = {}
   setmetatable(blk, Block)
-  blk._teleport = teleport or nil
+  
   blk._size = 24
   blk._x = x
   blk._y = y
-  blk._movement = true
+  blk._movement = false
   blk._destruction = false
-  
-  
   
   blk._animProp = MOAIProp2D.new()  
   blk._animation = MOAIAnim:new()
@@ -52,11 +50,11 @@ function Block.create(x, y, blockType,teleport)
   
   --Collision
   function handleCollision(phase, a, b, arbiter)
-
+    
     -- Set all boxes around surrounding the bomb to bombable
     if a.userdata[1] == "bomb" then
       
-      if b.userdata[1] ~= nil and b.userdata[1] ~= "wall" and b.userdata[1] ~= "arrow" and b.userdata[1] ~= "Bullet" and b.userdata[1] ~= "portal" then
+      if b.userdata[1] ~= nil and b.userdata[1] ~= "wall" and b.userdata[1] ~= "arrow" and b.userdata[1] ~= "Bullet" then
         
         table.insert(b.userdata[3], a.userdata[4])
         
@@ -76,7 +74,7 @@ function Block.create(x, y, blockType,teleport)
         ----------------------------------------------------
         -- Ignore destruction at certain blocks
         ----------------------------------------------------
-        if a.userdata[1] ~= "wall" and a.userdata[1] ~= "metal" and a.userdata[1] ~= "bomb" and a.userdata[1] ~= "arrow" and a.userdata[1] ~= "portal" then
+        if a.userdata[1] ~= "wall" and a.userdata[1] ~= "metal" and a.userdata[1] ~= "bomb" and a.userdata[1] ~= "arrow" then
           
           if a.userdata[1] == "fire" then 
             
@@ -102,11 +100,11 @@ function Block.create(x, y, blockType,teleport)
             blk:destruction()
             
             
-           if progressBar:getRemainingParts() == 0 then
+            if progressBar:getRemainingParts() == 0 then
             
               gameView:gamePopupWin()
             
-            end  
+            end
             
           else
             
@@ -145,49 +143,21 @@ function Block.create(x, y, blockType,teleport)
           blk:explosion(a:getBody():getPosition())
           
         end
-        --------------------------
-        -- portal transportation
-        --------------------------
- 
         
         --------------------------
-        -- Bullet rotation / 
+        -- Bullet rotation
         --------------------------
         if b.userdata[1] == "Bullet" and b ~= nil then
-         if a.userdata[1] == "portal" then
-           function changePosition()
-             for key,value in pairs(bullet) do
-               
-                if bullet[key]:getBulletBody() == b:getBody() then
-                  if bullet[key]:getTeleportable() == true then
-                    local buldir = bullet[key]:getDirection()
-                    bullet[key]:destruction()
-                    local xs,ys = Blockinator:getPortal(blk._teleport)
-                  table.insert(bullet, Bullet.create(xs, ys-50, buldir))
-                  end
-                end
-              end
-              end
-            local timer = MOAITimer.new()
-            timer:setSpan(0.1)
-            timer:setMode(MOAITimer.NORMAL)
-            timer:setListener(MOAITimer.EVENT_TIMER_END_SPAN, changePosition)
-            timer:start()
-          end
-          
+        
           if a.userdata[1] == "arrow" then
-          
+            
             local arrowprop = blk:getBlockProp()
             local rotation = arrowprop:getRot()
-          
+            
             function changeDirection()
-           
-           -- print(b:getBody:getPosition())
+    
               for key,value in pairs(bullet) do
-                
-     
-      
-           -- text["gameCurrentLevel"] = TextField.create(120, 200, 150, 75, "arrow "..currentLevel, 35)
+            
                 if bullet[key]:getBulletBody() == b:getBody() then
                 
                   if rotation > -10 and rotation < 10 then
@@ -205,7 +175,7 @@ function Block.create(x, y, blockType,teleport)
                   elseif rotation > 80 and rotation < 100 then
                     
                     bullet[key]:setDirection("left", a:getBody():getPosition())
-                      
+                    
                   end
               
                 end
@@ -214,11 +184,11 @@ function Block.create(x, y, blockType,teleport)
                 
             end
 
-            local timer2 = MOAITimer.new()
-            timer2:setSpan(0.1)
-            timer2:setMode(MOAITimer.NORMAL)
-            timer2:setListener(MOAITimer.EVENT_TIMER_END_SPAN, changeDirection)
-            timer2:start()
+            local timer = MOAITimer.new()
+            timer:setSpan(0.1)
+            timer:setMode(MOAITimer.NORMAL)
+            timer:setListener(MOAITimer.EVENT_TIMER_END_SPAN, changeDirection)
+            timer:start()
             
           end
           
@@ -227,7 +197,7 @@ function Block.create(x, y, blockType,teleport)
         ----------------------------
         -- Bullet destruction
         ----------------------------
-        if a.userdata[1] ~= "arrow" and  a.userdata[1] ~= "portal" then
+        if a.userdata[1] ~= "arrow" then
         
           for key,value in pairs(bullet) do
             
@@ -266,10 +236,8 @@ function Block:make()
     
     self._image:setTexture(resourceManager:getTexture(part))
   
-elseif self._fixture.userdata[1] =="portal" then
-  self._image:setTexture(resourceManager:getTexture("air"))
-  self:animate(7, 0.05,"portal", self._x, self._y,true)
   else
+  
     self._image:setTexture(resourceManager:getTexture(self._fixture.userdata[1]))
   
   end
@@ -285,7 +253,7 @@ elseif self._fixture.userdata[1] =="portal" then
 end
 
 function Block:destruction()
- 
+  
   if self:getUserdata(1) ~= "bomb" and self._destruction == false then
     
     self._destruction = true
@@ -387,11 +355,10 @@ function Block:explosion(x,y)
     
 end
 
-function Block:animate(tl, sp, dck, x, y,loop)
+function Block:animate(tl, sp, dck, x, y)
   
   local tiles = tl
   local speed = sp
-  local length = loop or false
   
   self._animProp:setDeck(ResourceManager:getTexture(dck))
   self._animProp:setLoc(x,y)
@@ -411,7 +378,7 @@ function Block:animate(tl, sp, dck, x, y,loop)
   self._animation:setMode(MOAITimer.LOOP)
   self._animation:setSpan(tiles * speed)
   self._animation:start()
-  if length == false then
+  
   self._animation:setListener(MOAIAnim.EVENT_TIMER_END_SPAN, 
   function()
     self._animation:stop()
@@ -426,7 +393,7 @@ function Block:animate(tl, sp, dck, x, y,loop)
     end
     
   end)
-  end
+  
 end
 
 -- Set Texture
@@ -442,7 +409,7 @@ function Block:getBlockBody() return self._body end
 function Block:getBlockProp() return self._prop end
 
 function Block:getUserdata(index) return self._fixture.userdata[index] end
-function Block:getPos() return self._fixture end
+
 function Block:getDestructionState() return self._destruction end
 function Block:setDestruction(state) self._destruction = state end
 
