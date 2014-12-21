@@ -10,13 +10,11 @@ user_data = {}
 -- Reset the user_data table, in case the user needs it (application-persistent data reset)
 function reset_user_data()
 
-  user_data.levelData = {
-    ["level1"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level2"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level3"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level4"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level5"] = {["time"] = "05:00", ["status"] = "incomplete"}
-  } 
+  user_data.levelData = {}
+  for i=1,9999 do
+    user_data.levelData[i] = {["time"] = "05:00", ["status"] = "incomplete"}
+ end
+  
 
   -- every time you use this method in your code somewhere, user_data will persist.
   save_user_data()

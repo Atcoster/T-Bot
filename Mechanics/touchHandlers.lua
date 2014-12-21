@@ -1,6 +1,30 @@
 ---------------------------
 -- Mouse handlers
 ----------------------------
+canpress = true
+function onBackButtonPressed ()
+  if canpress == true then
+    if gameState == "LevelSelection" then gameView:loadMainMenu() 
+  elseif gameState == "LevelSelectionPopup" then gameView:loadLevelSelectMenu()
+    elseif gameState == "Playfield" then gameView:gamePopup()
+    elseif gameState == "paused" then 
+      resumeGame()
+    end
+   -- if gameState == "LevelSelection" then gameView:loadMainMenu() end
+    --if gameState == "LevelSelection" then gameView:loadMainMenu() end
+    canpress = false
+  end
+   local timerback = MOAITimer.new()
+    timerback:setSpan(0.9)
+    timerback:setMode(MOAITimer.NORMAL)
+    timerback:setListener(MOAITimer.EVENT_TIMER_END_SPAN,resetBB)
+    timerback:start()
+    return true
+end
+
+function resetBB() canpress = true end
+
+MOAIApp.setListener ( MOAIApp.BACK_BUTTON_PRESSED, onBackButtonPressed )
 
 if MOAIInputMgr.device.pointer then 
   
@@ -102,34 +126,18 @@ function downAction(x,y,touchedProp)
    
   if gameState == "LevelSelection" then
     
-    if(touchedProp == text["levelOne"]:getTextProp()) then currentLevel="level1" gameView:levelSelectionPopup("1-1")  end
+    if(touchedProp == text["lvlNum"][1]:getTextProp()) then currentLevel=1 gameView:levelSelectionPopup("Lvl 1")  end
     
-    if user_data.levelData["level1"]["status"] == "complete" then 
+    for i=2,levelAmount do
+    if user_data.levelData[i-1]["status"] == "complete" then 
       
-      if(touchedProp == text["levelTwo"]:getTextProp()) then currentLevel="level2" gameView:levelSelectionPopup("1-2")   end
+      if(touchedProp == text["lvlNum"][i]:getTextProp()) then currentLevel=i gameView:levelSelectionPopup("Lvl "..i)   end
     
     end
-  
-    if user_data.levelData["level2"]["status"] == "complete" then
-    
-      if(touchedProp == text["levelThree"]:getTextProp()) then currentLevel="level3" gameView:levelSelectionPopup("1-3")  end
-    
-    end
-  
-    if user_data.levelData["level3"]["status"] == "complete" then
-    
-      if(touchedProp == text["levelFour"]:getTextProp()) then currentLevel="level4" gameView:levelSelectionPopup("1-4")  end
-      
-    end
-    
-    if user_data.levelData["level4"]["status"] == "complete" then
-      
-      if(touchedProp == text["levelFive"]:getTextProp()) then currentLevel="level5" gameView:levelSelectionPopup("1-5")  end
-      
-    end
-    
+  end
+
     if(touchedProp == button["levelBackButton"]:getProp()) then gameView:loadMainMenu() end
-  
+    
   end
 
   if gameState == "LevelSelectionPopup" then
@@ -164,16 +172,7 @@ function downAction(x,y,touchedProp)
     
     if touchedProp == button["popupGamePlay"]:getProp() then
       
-      gameTime:start()
-      player:setMovement(true)
-      gameState = "Playfield"
-      
-      layer:removeProp(button["popupBackground"]:getProp())
-      layer:removeProp(button["popupGameStop"]:getProp())
-      layer:removeProp(button["popupGameRestart"]:getProp())
-      layer:removeProp(button["popupGamePlay"]:getProp())
-      
-      layer:removeProp(text["gamePauseTitle"]:getTextProp())
+    resumeGame()
     
     end
   
@@ -198,12 +197,12 @@ function downAction(x,y,touchedProp)
   if gameState == "gameWon" then 
     
     if(touchedProp == button["popupLevelPlay"]:getProp()) then 
-    if currentLevel =="level1" then currentLevel="level2" 
-    elseif currentLevel =="level2" then currentLevel="level3" 
-    elseif currentLevel =="level3" then currentLevel="level4" 
-    elseif currentLevel =="level4" then currentLevel="level5" 
-    elseif currentLevel =="level5" then currentLevel="level1" end
-      gameView:loadLevel() end
+      if currentLevel ~= levelAmount then
+      currentLevel = currentLevel + 1
+      gameView:loadLevel()
+      else gameView:loadLevelSelectMenu()
+    end
+       end
     
     if touchedProp == button["popupGameRestart"]:getProp() then
       
@@ -329,9 +328,9 @@ function downAction(x,y,touchedProp)
         
         -- rotating blocks
         if blocks[key]:getUserdata(1) == "arrow" then
-            
+            --print(blocks[117]:getPos())
             blocks[key]:getBlockProp():moveRot(-90, 0.5)
-            soundManager:playMusic("arrowSwitch")
+           -- soundManager:playMusic("arrowSwitch")
         end
         
         -- Swiping - Under construction
@@ -385,3 +384,18 @@ function releaseAction(x,y,touchedProp)
   end
   
 end
+
+
+
+function resumeGame()
+        gameTime:start()
+      player:setMovement(true)
+      gameState = "Playfield"
+      
+      layer:removeProp(button["popupBackground"]:getProp())
+      layer:removeProp(button["popupGameStop"]:getProp())
+      layer:removeProp(button["popupGameRestart"]:getProp())
+      layer:removeProp(button["popupGamePlay"]:getProp())
+      
+      layer:removeProp(text["gamePauseTitle"]:getTextProp())
+      end

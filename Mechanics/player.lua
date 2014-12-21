@@ -93,6 +93,7 @@ function Player:getMovement() return self._movement end
 function Player:setMovement(state) self._movement = state  end
 
 function Player:setDirection(dir) self._direction = dir end
+function Player:getDirection() return self._direction  end
 
 function Player:getPlayerBody() return self._body end
 

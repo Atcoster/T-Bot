@@ -8,15 +8,12 @@ local function init ( objects )
 
   table = objects [ 0x029A08E0 ]
 
-  table [ "levelData" ] = {
+  table [ "levelData" ] = {}
+  for i=1,9999 do
+     table [ "levelData" ][i] = {["time"] = "05:00", ["status"] = "incomplete"}
+     end
     
-    ["level1"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level2"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level3"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level4"] = {["time"] = "05:00", ["status"] = "incomplete"},
-    ["level5"] = {["time"] = "05:00", ["status"] = "incomplete"}
     
-    }
 
 end
 

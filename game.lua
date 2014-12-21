@@ -8,16 +8,9 @@ gameView:loadMainMenu()
 --gameView:loadLevel()
 
 
-
 --reset_user_data()
 
-print(user_data.levelData["level1"]["status"])
-print(user_data.levelData["level2"]["status"])
-print(user_data.levelData["level3"]["status"])
-print(user_data.levelData["level4"]["status"])
-print(user_data.levelData["level5"]["status"])
 
-  
 ----------------------------------
 -- Game loop
 ----------------------------------
@@ -73,40 +66,27 @@ function update()
     mouseStartX = mouseStartX+acceloSpeed
     
     if player:getMovement() == true then 
-      
-      local playerX, playerY = player:getPlayerBody():getPosition()
-      
-      if playerX < mouseStartX then
-        
-        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
+      if tiltControl == false then
+        local playerX, playerY = player:getPlayerBody():getPosition()
+        if mouseStartX > (playerX+24) then
           
-          player:move(0)
+         player:move(1)
           
-          
-        else
-        
-          player:move(8)
-        
         end
         
-      end
-      
-      if playerX > mouseStartX then
+        if mouseStartX < (playerX-24) then
         
-        if playerX > mouseStartX and playerX < (mouseStartX + 24) then
-          
-          player:move(0)
-          
-        else
-        
-          player:move(-8)
-        
-        end
+        player:move(-1)
         
       end
     
+    
+    else
+        player:move(acceloSpeed)
+      end
     end
-
   end
 
 end
+
+
