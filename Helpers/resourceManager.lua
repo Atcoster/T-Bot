@@ -5,7 +5,6 @@ ResourceManager = {}
 ResourceManager.__index = ResourceManager
 
 local images = {}
-local sounds = {}
 
 ----------------------------
 -- Constructor
