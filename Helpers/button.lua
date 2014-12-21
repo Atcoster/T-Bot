@@ -7,16 +7,18 @@ Button.__index = Button
 ----------------------------
 -- Constructor
 ----------------------------
-function Button.create(x, y, texture)
+function Button.create(x, y, texture,rows,cols)
 
   local btn = {}
   setmetatable(btn, Button)
   
+  btn._rows = rows or 1
+  btn._cols = cols or 1
   btn._x = x
   btn._y = y
   btn._texture = texture
   
-  btn._sprite = MOAIGfxQuad2D.new()
+  btn._sprite = MOAITileDeck2D.new()
   btn._prop =  MOAIProp2D.new()
   
   -- Powerups logic
@@ -40,18 +42,20 @@ function Button:make()
   local w, h = self._texture:getSize()
   
   --Sprite
-  self._sprite:setTexture(self._texture)
-  self._sprite:setRect(-w, -h, w, h)
+  self._sprite:setTexture( self._texture)
+  self._sprite:setSize(self._rows,self._cols)
+  self._sprite:setRect(-w/self._rows, -h/self._cols, w/self._rows, h/self._cols)
   
   --Prop
-  self._prop:setDeck(self._sprite)
+  self._prop:setDeck(self._sprite) 
   self._prop:setLoc(self._x, self._y)
-
+ 
   --Insert prop
   layer:insertProp(self._prop)
   partition:insertProp(self._prop)
 
 end
+
 
 -- Set Texture
 function Button:changeTexture(texture)

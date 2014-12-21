@@ -71,10 +71,21 @@ function Player:make()
 end
 
 function Player:move(direction)
-  
+  local dir = 0
   local x,y = self._body:getPosition()
-  self._body:setAwake(true)
-  self._body:setTransform(x + direction,y)
+  
+   if direction > 0 and x < 288 then dir = 48 end
+   if direction < 0 and x > -288 then dir = -48 end
+   if tiltControl == true then moveClip = moveClip +direction 
+   else moveClip = dir end
+   
+  if moveClip >= 48 or moveClip <= -48 then
+    
+    self._body:setAwake(true)
+    self._body:setTransform(x+dir,y)
+    moveClip = 0
+    
+  end
   
 end
 
@@ -82,6 +93,7 @@ function Player:getMovement() return self._movement end
 function Player:setMovement(state) self._movement = state  end
 
 function Player:setDirection(dir) self._direction = dir end
+function Player:getDirection() return self._direction  end
 
 function Player:getPlayerBody() return self._body end
 

@@ -5,7 +5,7 @@
 ----------------------------
 -- FOR PC TESTING
 ----------------------------
-local gameName = "T-Bot"
+--[[ local gameName = "T-Bot"
 local screenWidth = 320
 local screenHeight = 480
 
@@ -19,11 +19,11 @@ MOAISim.openWindow(gameName, deviceScreenWidth, deviceScreenHeight)
 viewport = MOAIViewport.new()
 viewport:setSize(deviceScreenWidth, deviceScreenHeight)
 viewport:setScale(deviceScreenWidth*2, deviceScreenHeight*2)
-
+]]--
 ----------------------------
 -- FOR MOBILE TESTING
 ----------------------------
---[[
+
 local gameName = "T-Bot"
 gameWidth = 480
 gameHeight = 320
@@ -55,9 +55,9 @@ local realAspect = deviceHeight / deviceWidth
  end
 
 viewport = MOAIViewport.new()
-viewport:setSize ( screenXOffset, 0, screenXOffset + screenWidth,  screenHeight*1.5 )
+viewport:setSize ( screenXOffset, -100, screenXOffset + screenWidth,  screenHeight*1.5-100 )
 viewport:setScale ( gameWidth*1.33, gameHeight*3.33 )
---]]
+
 
 ----------------------------
 -- Adding layers
@@ -95,10 +95,13 @@ bullet = {}
 blocks = {}
 blockGenerator = {}
 
-currentLevel = ""
+levelAmount = 0
+currentPage = 1
+currentLevel = 1
 
 mouseStartX = 0
 acceloSpeed = 0
+moveClip = 0
 tiltControl = false
 
 gameView = {}
@@ -119,9 +122,6 @@ resourceManager = ResourceManager.create()
 require("Helpers/soundManager")
 soundManager = SoundManager.create()
 
-require("Helpers/motionManager")
-motionManager = MotionManager.create()
-
 require("Helpers/progressbar")
 progressBar = Progressbar.create()
 
@@ -132,8 +132,10 @@ player = Player.create()
 require("Helpers/view")
 require("Helpers/dataPersistence")
 require("Helpers/button")
+require("Helpers/animator")
 require("Helpers/view")
 require("Helpers/textfield")
+require("Helpers/motionManager")
 
 -- Mechanics
 require("Mechanics/block")
@@ -142,3 +144,5 @@ require("Mechanics/bullet")
 require("Mechanics/touchHandlers")
 require("Mechanics/viewControl")
 require("game")
+
+levelAmount = Blockinator:getLevelAmount()
