@@ -8,7 +8,13 @@ gameView:loadMainMenu()
 --gameView:loadLevel()
 
 
---reset_user_data()
+
+
+print(user_data.levelData["level1"]["status"])
+print(user_data.levelData["level2"]["status"])
+print(user_data.levelData["level3"]["status"])
+print(user_data.levelData["level4"]["status"])
+print(user_data.levelData["level5"]["status"])
   
 ----------------------------------
 -- Game loop
