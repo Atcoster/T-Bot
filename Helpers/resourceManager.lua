@@ -5,10 +5,8 @@ ResourceManager = {}
 ResourceManager.__index = ResourceManager
 
 local images = {}
-<<<<<<< HEAD
-=======
+
 local sounds = {}
->>>>>>> parent of 8623f35... Very much changed , do not remember what but it works :')
 
 ----------------------------
 -- Constructor
@@ -44,12 +42,10 @@ function ResourceManager:loadResources()
   images["selectbackground"]:load("Assets/img/Views/Levels/level-background.png")
   images["selectbackground"]:invalidate()
   
-<<<<<<< HEAD
-=======
   -----------------------
   --PopUps
   -----------------------
->>>>>>> parent of 8623f35... Very much changed , do not remember what but it works :')
+
   images["popupBackground"] = MOAITexture.new()
   images["popupBackground"]:load("Assets/img/Views/Popups/popupBG.png")
   
